@@ -34,7 +34,7 @@ const SignUp = () => {
     return (
         <div className="flex flex-col md:flex-row w-full overflow-auto">
             {/* Left Section (Image and Welcome Text) */}
-            <div className="relative md:w-1/2 w-full h-auto md:h-full flex items-center justify-center bg-gray-100">
+            <div className="relative md:w-1/2 w-full h-auto md:h-screen flex items-center justify-center bg-gray-100">
                 {/* Text Overlay */}
                 <div className="absolute top-8 left-8 md:left-12 md:top-12">
                     <div className="flex items-center space-x-2 mb-4 md:mb-8">
@@ -48,8 +48,8 @@ const SignUp = () => {
                 <img 
                     src="./assets/signup-image" 
                     alt="Person using laptop and calculator" 
-                    className="w-full h-full object-cover" 
-                    onError={(e) => { e.target.src = "https://placehold.co/720x1040?text=Signup+Image"; }}
+                    className="w-full h-full object-cover md:max-h-screen md:object-cover md:w-3/4" 
+                    onError={(e) => { e.target.src = "https://placehold.co/720x720?text=Signup+Image"; }}
                 />
             </div>
 
