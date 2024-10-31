@@ -1,6 +1,6 @@
 import React from "react";
-// import { ArrowUpward} from "@mui/icons-material/ArrowUpward";
-// import { ArrowDownward } from "@mui/icons-material/ArrowDownward";
+import { ArrowUpward} from "@mui/icons-material/ArrowUpward";
+import { ArrowDownward } from "@mui/icons-material/ArrowDownward";
 
 
 const AverageSpending = ({ spending = 0, income = 0, expenses = 0 }) => {
@@ -12,7 +12,7 @@ const AverageSpending = ({ spending = 0, income = 0, expenses = 0 }) => {
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="flex items-center bg-green-100 text-green-500 rounded-full p-2 mr-2">
-            {/* <ArrowUpward /> */}
+            <ArrowUpward />
           </div>
           <div>
             <span className="text-sm text-gray-500">Income</span>
@@ -22,7 +22,7 @@ const AverageSpending = ({ spending = 0, income = 0, expenses = 0 }) => {
 
         <div className="flex items-center">
           <div className="flex items-center bg-red-100 text-red-500 rounded-full p-2 mr-2">
-            {/* <ArrowDownward /> */}
+            <ArrowDownward />
           </div>
           <div>
             <span className="text-sm text-gray-500">Expenses</span>
