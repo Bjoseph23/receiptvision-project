@@ -17,7 +17,7 @@ function App() {
 function AppContent() {
   const location = useLocation();
   // Define the paths where NavBar should not be displayed
-  const hideNavBarPaths = ['/login', '/signup'];
+  const hideNavBarPaths = ['/login','/Login','/Signup', '/signup'];
   
   const isNavBarVisible = !hideNavBarPaths.includes(location.pathname);
 

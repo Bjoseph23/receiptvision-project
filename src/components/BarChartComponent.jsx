@@ -3,11 +3,11 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 
 const BarChartComponent = ({ title, data, className }) => {
   const chartData = [
-    { name: "Mon", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Tue", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Wed", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Thu", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Fri", income: data.income || 0, expenses: data.expenses || 0 },
+    { name: "Monday", income: data.income || 0, expenses: data.expenses || 0 },
+    { name: "Tuesday", income: data.income || 0, expenses: data.expenses || 0 },
+    { name: "Wednesday", income: data.income || 0, expenses: data.expenses || 0 },
+    { name: "Thursay", income: data.income || 0, expenses: data.expenses || 0 },
+    { name: "Friday", income: data.income || 0, expenses: data.expenses || 0 },
   ];
 
   return (

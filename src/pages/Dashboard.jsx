@@ -5,8 +5,7 @@ import LineChartComponent from "../components/LineChartComponent";
 import BarChartComponent from "../components/BarChartComponent";
 import PieChartComponent from "../components/PieChartComponent";
 import RecentTransactions from "../components/RecentTransactions";
-import ArrowUpward from "@mui/icons-material/ArrowUpward";
-import ArrowDownward from "@mui/icons-material/ArrowDownward";
+
 
 
 const Dashboard = () => {
