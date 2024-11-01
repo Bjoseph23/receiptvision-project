@@ -58,27 +58,9 @@ const SignUp = () => {
 
     return (
         <div className="flex flex-col md:flex-row w-full h-screen overflow-auto">
-            {/* Right Section (Image with Overlay Text) */}
-            <div className="relative md:w-1/2 w-full h-1/2 md:h-full bg-gray-100 flex items-center justify-center">
-                <img
-                    src="https://placehold.co/720x720?text=Signup+Image"
-                    alt="Person using laptop and calculator"
-                    className="w-full h-full object-cover"
-                    onError={(e) => { e.target.src = "https://placehold.co/720x720?text=Signup+Image"; }}
-                />
-                <div className="absolute top-8 left-8 md:top-1/4 md:left-1/4 p-4 text-left">
-                    <div className="text-left">
-                        <div className="text-5xl font-bold text-gray-900">•</div>
-                        <h1 className="text-4xl font-bold text-gray-800 mt-2">
-                            Welcome to <span className="text-blue-600">ReceiptVision</span>
-                        </h1>
-                    </div>
-                </div>
-            </div>
-
             {/* Left Section (Form) */}
-            <div className="md:w-1/2 w-full h-full flex items-center justify-center p-8">
-                <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+            <div className="md:w-1/2 w-full flex items-center justify-center p-8">
+                <form onSubmit={handleSubmit} className="w-full mt-10 max-w-md space-y-6">
                     <h2 className="text-2xl font-bold text-gray-800">Create an account</h2>
 
                     {/* Error Message */}
@@ -181,7 +163,6 @@ const SignUp = () => {
                     <Typography variant="body2" className="text-gray-600 text-center">
                         By creating an account, you agree to our{' '}
                         <Link href="#" color="primary" underline="hover">Terms of use & Privacy Policy</Link> 
-                        
                     </Typography>
 
                     {/* Simulated reCAPTCHA */}
@@ -212,6 +193,24 @@ const SignUp = () => {
                         <Link href="#" color="primary" underline="hover" onClick={() => navigate('/login')}>Log in</Link>
                     </Typography>
                 </form>
+            </div>
+
+            {/* Right Section (Image with Overlay Text) */}
+            <div className="relative md:w-1/2 w-full h-1/2 md:h-full bg-gray-100 flex items-center justify-center order-first md:order-last">
+                <img
+                    src="https://placehold.co/720x720?text=Signup+Image"
+                    alt="Person using laptop and calculator"
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.src = "https://placehold.co/720x720?text=Signup+Image"; }}
+                />
+                <div className="absolute top-8 left-8 md:top-1/4 md:left-1/4 p-4 text-left">
+                    <div className="text-left">
+                        <div className="text-5xl font-bold text-gray-900">•</div>
+                        <h1 className="text-4xl font-bold text-gray-800 mt-2">
+                            Welcome to <span className="text-blue-600">ReceiptVision</span>
+                        </h1>
+                    </div>
+                </div>
             </div>
         </div>
     );
