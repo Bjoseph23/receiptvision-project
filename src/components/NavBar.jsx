@@ -32,7 +32,7 @@ const NavBar = () => {
       <div
         className={`${
           isOpen ? "w-64" : "w-20"
-        } bg-gray-200 h-full p-0 m-0 pt-8 pl-2 pr-2 relative duration-90`}
+        } bg-gray-200 h-screen p-0 m-0 pt-8 pl-2 pr-2 relative duration-90 flex flex-col justify-between`}
       >
         {/* Menu Icon */}
         <div className="absolute top-2 left-3 cursor-pointer p-2" onClick={toggleNav}>
@@ -52,7 +52,7 @@ const NavBar = () => {
         </div>
 
         {/* Menu Items */}
-        <ul className="pt-6 pr-1 pl-2">
+        <ul className="pt-6 pr-1 pl-2 flex-grow">
           {menuItems.map((item) => (
             <NavLink
               to={item.path}
@@ -85,17 +85,17 @@ const NavBar = () => {
 
           <button className="flex items-center  w-full gap-x-4 p-2 mt-2 rounded-md bg-blue-100 text-blue-600 hover:bg-blue-200">
             <UploadIcon fontSize="large" />
-            {isOpen && <span classname="font-bold">Upload Document</span>}
+            {isOpen && <span className="font-bold">Upload Document</span>}
           </button>
         </div>
 
         {/* Settings and Logout */}
-        <div className="absolute bottom-4 left-0 w-full px-4">
+        <div className="w-full px-4 pl-2">
           <ul>
             <NavLink
               to="/settings"
               onClick={() => setActiveItem("settings")}
-              className={`relative flex items-center gap-x-4 p-2 cursor-pointer rounded-md
+              className={`relative flex items-center gap-x-4 pt-3 pl-1 pb-2 cursor-pointer rounded-md
                 ${
                   activeItem === "settings"
                     ? "bg-blue-100 text-blue-800 font-bold"
@@ -108,7 +108,7 @@ const NavBar = () => {
             <NavLink
               to="/logout"
               onClick={() => setActiveItem("logout")}
-              className={`relative flex items-center gap-x-4 p-2 cursor-pointer rounded-md
+              className={`relative flex items-center gap-x-4 p-2 pl-1 cursor-pointer rounded-md
                 ${
                   activeItem === "logout"
                     ? "bg-blue-100 text-blue-800 font-bold"
