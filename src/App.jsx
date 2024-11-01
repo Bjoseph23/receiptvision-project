@@ -7,6 +7,9 @@ import NavBar from './components/NavBar';
 import Dashboard from './pages/Dashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Expenditure from './pages/Expenditure'; // Updated import
+import TermsAndPolicy from './components/TermsAndPolicy'; 
+import OneTapComponent from './components/OneTapComponent'; // Fixed path
 
 function App() {
     return (
@@ -20,13 +23,16 @@ function App() {
 
 function AppContent() {
     const location = useLocation();
-    const hideNavBarPaths = ['/login', '/Login', '/Signup', '/signup'];
+    const hideNavBarPaths = ['/login', '/Login', '/signup', '/Signup'];
     const isNavBarVisible = !hideNavBarPaths.includes(location.pathname);
-
+    
     return (
         <div className="flex h-screen overflow-hidden m-0 p-0">
             {isNavBarVisible && <NavBar />}
             <div className="flex-1 h-full m-0 p-0 overflow-y-auto">
+                {/* Google One-Tap Component: Loads conditionally */}
+                <OneTapComponent />
+                
                 <Routes>
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
@@ -36,6 +42,22 @@ function AppContent() {
                         element={
                             <ProtectedRoute>
                                 <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/expenditure"
+                        element={
+                            <ProtectedRoute>
+                                <Expenditure />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/terms"
+                        element={
+                            <ProtectedRoute>
+                                <TermsAndPolicy />
                             </ProtectedRoute>
                         }
                     />
