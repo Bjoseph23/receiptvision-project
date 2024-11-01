@@ -96,7 +96,7 @@ const Login = () => {
                             textTransform: 'none',
                         }}
                     >
-                        Create account
+                        Login
                     </button>
 
                     {/* Sign Up Link */}
