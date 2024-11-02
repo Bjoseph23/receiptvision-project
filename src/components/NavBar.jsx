@@ -132,6 +132,10 @@ const NavBar = () => {
             className="flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => setShowInvoiceProcessor(true)}
           >
+          <button 
+            className="flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+            onClick={() => setShowInvoiceProcessor(true)}
+          >
             <ReceiptIcon fontSize="large" />
             {isOpen && <span>Scan Receipt with AI</span>}
           </button>
@@ -187,9 +191,6 @@ const NavBar = () => {
           </div>
         </div>
       )}
-
-      {/* Show LogoutPopup if showLogoutPopup is true */}
-      {showLogoutPopup && <LogoutPopup onConfirm={confirmLogout} onCancel={cancelLogout} />}
     </div>
   );
 };
