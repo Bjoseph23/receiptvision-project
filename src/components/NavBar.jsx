@@ -10,6 +10,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import InvoiceProcessor from "./InvoiceProcesssor"; 
+import InvoiceProcessor from "./InvoiceProcesssor"; 
 import LogoutPopup from "./LogoutPopup"; // Import the popup
 import { useAuth } from "../contexts/AuthContext"; // Import AuthContext
 import supabase from "../components/supabaseClient";
@@ -171,6 +172,29 @@ const NavBar = () => {
           </ul>
         </div>
       </div>
+
+      {/* Invoice Processor Modal */}
+      {showInvoiceProcessor && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
+            <div className="p-4 flex justify-between items-center border-b">
+              <h2 className="text-xl font-bold">Scan Receipt</h2>
+              <button 
+                onClick={() => setShowInvoiceProcessor(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-4">
+              <InvoiceProcessor />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Show LogoutPopup if showLogoutPopup is true */}
+      {showLogoutPopup && <LogoutPopup onConfirm={confirmLogout} onCancel={cancelLogout} />}
 
       {/* Invoice Processor Modal */}
       {showInvoiceProcessor && (
