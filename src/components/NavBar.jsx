@@ -12,11 +12,13 @@ import UploadIcon from "@mui/icons-material/CloudUpload";
 import LogoutPopup from "./LogoutPopup"; // Import the popup
 import { useAuth } from "../contexts/AuthContext"; // Import AuthContext
 import supabase from "../components/supabaseClient";
+import InvoiceProcessor from "./InvoiceProcessor"; // Import the invoice processor
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [activeItem, setActiveItem] = useState("dashboard");
   const [showLogoutPopup, setShowLogoutPopup] = useState(false); // State for logout popup
+  const [showInvoiceProcessor, setShowInvoiceProcessor] = useState(false); // State for invoice processor modal
   const { signOut, user } = useAuth(); // Get signOut function and user from AuthContext
 
   const [userInfo, setUserInfo] = useState({
@@ -72,7 +74,7 @@ const NavBar = () => {
     { id: "expenditure", label: "Expenditure", icon: <MonetizationOnIcon fontSize="large" />, path: "/expenditure" },
     { id: "goals", label: "Goals and Tips", icon: <ReceiptIcon fontSize="large" />, path: "/goals" },
     { id: "analytics", label: "Revenue Analytics", icon: <BarChartIcon fontSize="large" />, path: "/analytics" },
-    { id: "terms", label: " Privacy Policy", icon: <PolicyIcon fontSize="large" />, path: "/terms" },
+    { id: "terms", label: "Privacy Policy", icon: <PolicyIcon fontSize="large" />, path: "/terms" },
   ];
 
   return (
@@ -123,10 +125,15 @@ const NavBar = () => {
         </ul>
 
         <div className="mt-6 pr-2 pl-1">
-          <button className="rounded-3xl pl-2 pr-2 flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-800 text-white hover:text-white hover:bg-blue-500">
+          {/* Button to open Invoice Processor */}
+          <button 
+            className="rounded-3xl pl-2 pr-2 flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-800 text-white hover:text-white hover:bg-blue-500"
+            onClick={() => setShowInvoiceProcessor(true)}
+          >
             <ReceiptIcon fontSize="large" />
             {isOpen && <span>Scan Receipt with AI</span>}
           </button>
+
           <button className="rounded-2xl flex items-center w-full gap-x-4 p-2 mt-2 bg-blue-200 text-blue-600 hover:text-white hover:bg-blue-400">
             <UploadIcon fontSize="large" />
             {isOpen && <span className="font-bold">Upload Document</span>}
@@ -161,6 +168,26 @@ const NavBar = () => {
 
       {/* Show LogoutPopup if showLogoutPopup is true */}
       {showLogoutPopup && <LogoutPopup onConfirm={confirmLogout} onCancel={cancelLogout} />}
+
+      {/* Invoice Processor Modal */}
+      {showInvoiceProcessor && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
+            <div className="p-4 flex justify-between items-center border-b">
+              <h2 className="text-xl font-bold">Scan Receipt</h2>
+              <button 
+                onClick={() => setShowInvoiceProcessor(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-4">
+              <InvoiceProcessor />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
