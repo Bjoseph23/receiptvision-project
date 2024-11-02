@@ -9,10 +9,12 @@ import PolicyIcon from "@mui/icons-material/Policy";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UploadIcon from "@mui/icons-material/CloudUpload";
+import InvoiceProcessor from "./InvoiceProcesssor"; 
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [activeItem, setActiveItem] = useState("dashboard");
+  const [showInvoiceProcessor, setShowInvoiceProcessor] = useState(false);
 
   const toggleNav = () => {
     setIsOpen(!isOpen);
@@ -32,7 +34,7 @@ const NavBar = () => {
       <div
         className={`${
           isOpen ? "w-64" : "w-20"
-        } bg-gray-200 h-full p-0 m-0 pt-8 pl-2 pr-2 relative duration-90`}
+        } bg-gray-200 h-screen p-0 m-0 pt-8 pl-2 pr-2 relative duration-300`}
       >
         {/* Menu Icon */}
         <div className="absolute top-2 left-3 cursor-pointer p-2" onClick={toggleNav}>
@@ -65,10 +67,7 @@ const NavBar = () => {
                     : "text-gray-600"
                 } hover:bg-blue-50 transition-all duration-300`}
             >
-              {/* Align the icons */}
               <span className="flex-shrink-0 text-xl">{item.icon}</span>
-
-              {/* Show labels when sidebar is open */}
               {isOpen && (
                 <span className="origin-left duration-200">{item.label}</span>
               )}
@@ -78,14 +77,17 @@ const NavBar = () => {
 
         {/* Special Buttons */}
         <div className="mt-6 pr-2 pl-1">
-          <button className="flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">
+          <button 
+            className="flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+            onClick={() => setShowInvoiceProcessor(true)}
+          >
             <ReceiptIcon fontSize="large" />
             {isOpen && <span>Scan Receipt with AI</span>}
           </button>
 
-          <button className="flex items-center  w-full gap-x-4 p-2 mt-2 rounded-md bg-blue-100 text-blue-600 hover:bg-blue-200">
+          <button className="flex items-center w-full gap-x-4 p-2 mt-2 rounded-md bg-blue-100 text-blue-600 hover:bg-blue-200">
             <UploadIcon fontSize="large" />
-            {isOpen && <span classname="font-bold">Upload Document</span>}
+            {isOpen && <span className="font-bold">Upload Document</span>}
           </button>
         </div>
 
@@ -121,6 +123,26 @@ const NavBar = () => {
           </ul>
         </div>
       </div>
+
+      {/* Invoice Processor Modal */}
+      {showInvoiceProcessor && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
+            <div className="p-4 flex justify-between items-center border-b">
+              <h2 className="text-xl font-bold">Scan Receipt</h2>
+              <button 
+                onClick={() => setShowInvoiceProcessor(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-4">
+              <InvoiceProcessor />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
