@@ -152,11 +152,11 @@ const InvoiceProcessor = () => {
             <Button 
               onClick={handleProcess} 
               disabled={!selectedFile || processing}
-              className="w-full"
+              className="w-full bg-blue-300 text-blue-900  rounded-xl hover:bg-blue-900 hover:text-white"
             >
               {processing ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4  animate-spin" />
                   Processing...
                 </>
               ) : (
@@ -174,7 +174,7 @@ const InvoiceProcessor = () => {
           <div className="space-y-4">
             {result && (
               <div className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">Extracted Data:</h3>
+                <h3 className="text-lg font-semibold mb-2">Extracted JSON Data:</h3>
                 <pre className="bg-gray-50 p-4 rounded-lg overflow-auto max-h-[500px] text-sm">
                   {JSON.stringify(result, null, 2)}
                 </pre>
