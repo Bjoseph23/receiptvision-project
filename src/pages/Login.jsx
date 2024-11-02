@@ -133,7 +133,7 @@ const Login = () => {
                 <form className="w-full max-w-md space-y-6" onSubmit={handleEmailLogin}>
                     <h2 className="text-3xl font-bold text-center text-gray-800">Receipt<span className="text-blue-600">Vision</span></h2>
                     <Typography variant="h5" className="text-center text-gray-600 mt-2 mb-4">
-                        Sign in
+                        Login in
                     </Typography>
 
                     {/* Error Message */}
@@ -148,12 +148,12 @@ const Login = () => {
                         variant="outlined"
                         fullWidth
                         onClick={handleGoogleLogin}
-                        startIcon={<img src="https://placehold.co/20x20?text=G" alt="Google icon" />}
-                        className="text-gray-600 border-gray-300"
-                    >
-                        Continue with Google
+                        className="px-4 py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
+                        >
+                        <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"></img>
+                        <span>Login with Google</span>
                     </Button>
-
+                    
                     <Divider className="my-4">OR</Divider>
 
                     {/* Email Field */}

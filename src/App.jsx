@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
@@ -7,6 +7,10 @@ import NavBar from './components/NavBar';
 import Dashboard from './pages/Dashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Expenditure from './pages/Expenditure';
+import TermsAndPolicy from './components/TermsAndPolicy';
+import OneTapComponent from './components/OneTapComponent';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
     return (
@@ -20,13 +24,27 @@ function App() {
 
 function AppContent() {
     const location = useLocation();
-    const hideNavBarPaths = ['/login', '/Login', '/Signup', '/signup'];
-    const isNavBarVisible = !hideNavBarPaths.includes(location.pathname);
+    const [isNavBarVisible, setIsNavBarVisible] = useState(true);
+
+    // Paths where NavBar should be hidden
+    const hideNavBarPaths = ['/login', '/Login', '/signup', '/Signup'];
+
+    // Update NavBar visibility based on current path
+    useEffect(() => {
+        // Check if the current path is in the hideNavBarPaths array or is an unmatched route (404)
+        if (hideNavBarPaths.includes(location.pathname) || location.pathname === '/404') {
+            setIsNavBarVisible(false);
+        } else {
+            setIsNavBarVisible(true);
+        }
+    }, [location.pathname]);
 
     return (
         <div className="flex h-screen overflow-hidden m-0 p-0">
             {isNavBarVisible && <NavBar />}
             <div className="flex-1 h-full m-0 p-0 overflow-y-auto">
+                <OneTapComponent />
+                
                 <Routes>
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
@@ -39,7 +57,50 @@ function AppContent() {
                             </ProtectedRoute>
                         }
                     />
+                    <Route
+                        path="/expenditure"
+                        element={
+                            <ProtectedRoute>
+                                <Expenditure />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/terms"
+                        element={
+                            <ProtectedRoute>
+                                <TermsAndPolicy />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/analytics"
+                        element={
+                            <ProtectedRoute>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/settings"
+                        element={
+                            <ProtectedRoute>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/goals"
+                        element={
+                            <ProtectedRoute>
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    
+                    {/* 404 Not Found Page */}
+                    <Route
+                        path="*"
+                        element={<NotFoundPage />}
+                    />
                 </Routes>
             </div>
         </div>
