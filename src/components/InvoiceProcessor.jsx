@@ -152,7 +152,7 @@ const InvoiceProcessor = () => {
             <Button 
               onClick={handleProcess} 
               disabled={!selectedFile || processing}
-              className="w-full bg-blue-300 text-blue-900  rounded-xl hover:bg-blue-900 hover:text-white"
+              className="w-full bg-blue-300  rounded-xl hover:bg-blue-900 hover:text-white"
             >
               {processing ? (
                 <>
