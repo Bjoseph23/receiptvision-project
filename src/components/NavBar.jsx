@@ -12,7 +12,7 @@ import UploadIcon from "@mui/icons-material/CloudUpload";
 import LogoutPopup from "./LogoutPopup"; // Import the popup
 import { useAuth } from "../contexts/AuthContext"; // Import AuthContext
 import supabase from "../components/supabaseClient";
-import InvoiceProcessor from "./InvoiceProcessor"; 
+import InvoiceProcessor from "./InvoiceProcessor"; // Import the invoice processor
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -49,7 +49,7 @@ const NavBar = () => {
         try {
           const { data, error } = await supabase
             .from("users")
-            .select("name")
+            .select("email")
             .eq("id", user.id)
             .single();
 
