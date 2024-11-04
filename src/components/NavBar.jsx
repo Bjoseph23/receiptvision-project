@@ -49,7 +49,7 @@ const NavBar = () => {
         try {
           const { data, error } = await supabase
             .from("users")
-            .select("name")
+            .select("email")
             .eq("id", user.id)
             .single();
 
