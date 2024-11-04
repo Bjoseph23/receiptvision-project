@@ -9,19 +9,17 @@ import PolicyIcon from "@mui/icons-material/Policy";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UploadIcon from "@mui/icons-material/CloudUpload";
-import InvoiceProcessor from "./InvoiceProcesssor"; 
-import InvoiceProcessor from "./InvoiceProcesssor"; 
-import LogoutPopup from "./LogoutPopup"; // Import the popup
-import { useAuth } from "../contexts/AuthContext"; // Import AuthContext
+import InvoiceProcessor from "./InvoiceProcessor";
+import LogoutPopup from "./LogoutPopup";
+import { useAuth } from "../contexts/AuthContext";
 import supabase from "../components/supabaseClient";
-import InvoiceProcessor from "./InvoiceProcessor"; 
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [activeItem, setActiveItem] = useState("dashboard");
   const [showInvoiceProcessor, setShowInvoiceProcessor] = useState(false);
-  const [showLogoutPopup, setShowLogoutPopup] = useState(false); // State for logout popup
-  const { signOut, user } = useAuth(); // Get signOut function and user from AuthContext
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const { signOut, user } = useAuth();
 
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -32,19 +30,18 @@ const NavBar = () => {
   };
 
   const handleLogout = () => {
-    setShowLogoutPopup(true); // Show the popup on logout click
+    setShowLogoutPopup(true);
   };
 
   const confirmLogout = () => {
-    setShowLogoutPopup(false); // Close the popup
-    signOut(); // Call the signOut function to logout
+    setShowLogoutPopup(false);
+    signOut();
   };
 
   const cancelLogout = () => {
-    setShowLogoutPopup(false); // Hide the popup if the user cancels
+    setShowLogoutPopup(false);
   };
 
-  // Fetch user data based on the authenticated user's ID from Supabase
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (user) {
@@ -76,12 +73,11 @@ const NavBar = () => {
     { id: "expenditure", label: "Expenditure", icon: <MonetizationOnIcon fontSize="large" />, path: "/expenditure" },
     { id: "goals", label: "Goals and Tips", icon: <ReceiptIcon fontSize="large" />, path: "/goals" },
     { id: "analytics", label: "Revenue Analytics", icon: <BarChartIcon fontSize="large" />, path: "/analytics" },
-    { id: "terms", label: " Privacy Policy", icon: <PolicyIcon fontSize="large" />, path: "/terms" },
+    { id: "terms", label: "Privacy Policy", icon: <PolicyIcon fontSize="large" />, path: "/terms" },
   ];
 
   return (
     <div className="flex m-0 p-0 pr-0">
-      {/* Sidebar */}
       <div
         className={`${
           isOpen ? "w-64" : "w-20"
@@ -91,7 +87,6 @@ const NavBar = () => {
           <MenuIcon fontSize="large" />
         </div>
 
-        {/* ReceiptVision Logo */}
         {isOpen && (
           <div className="pl-3 mt-8 mb-4">
             <h1 className="text-xl font-bold">
@@ -101,7 +96,6 @@ const NavBar = () => {
           </div>
         )}
 
-        {/* User Avatar and Name */}
         <div className="flex items-center gap-x-4 mt-6 pl-3">
           <img src="https://placehold.co/60" alt="User Avatar" className="w-12 h-12 rounded-full" />
           {isOpen && <h1 className="text-xl font-bold whitespace-nowrap">{userInfo.name || 'User Name'}</h1>}
@@ -133,10 +127,6 @@ const NavBar = () => {
             className="flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => setShowInvoiceProcessor(true)}
           >
-          <button 
-            className="flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => setShowInvoiceProcessor(true)}
-          >
             <ReceiptIcon fontSize="large" />
             {isOpen && <span>Scan Receipt with AI</span>}
           </button>
@@ -163,7 +153,7 @@ const NavBar = () => {
               {isOpen && <span>Settings</span>}
             </NavLink>
             <div
-              onClick={handleLogout} // Show the logout popup on click
+              onClick={handleLogout}
               className="relative flex items-center gap-x-4 p-2 pl-1 cursor-pointer rounded-md text-gray-600 hover:bg-blue-50 transition-all duration-300"
             >
               <LogoutIcon fontSize="large" />
@@ -173,7 +163,6 @@ const NavBar = () => {
         </div>
       </div>
 
-      {/* Invoice Processor Modal */}
       {showInvoiceProcessor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
@@ -193,28 +182,7 @@ const NavBar = () => {
         </div>
       )}
 
-      {/* Show LogoutPopup if showLogoutPopup is true */}
       {showLogoutPopup && <LogoutPopup onConfirm={confirmLogout} onCancel={cancelLogout} />}
-
-      {/* Invoice Processor Modal */}
-      {showInvoiceProcessor && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
-            <div className="p-4 flex justify-between items-center border-b">
-              <h2 className="text-xl font-bold">Scan Receipt</h2>
-              <button 
-                onClick={() => setShowInvoiceProcessor(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
-              >
-                ×
-              </button>
-            </div>
-            <div className="p-4">
-              <InvoiceProcessor />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
