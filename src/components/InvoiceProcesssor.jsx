@@ -5,6 +5,7 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { Loader2 } from "lucide-react";
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import InvoiceDataHandler from "./InvoiceDataHandler"
+import InvoiceFormEditor from './invoiceformEditor';
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -173,14 +174,33 @@ const InvoiceProcessor = () => {
           </div>
 
           <div className="space-y-4">
-            {result && (
-              <div className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">Extracted JSON Data:</h3>
-                <pre className="bg-gray-50 p-4 rounded-lg overflow-auto max-h-[500px] text-sm">
-                  {JSON.stringify(result, null, 2)}
-                </pre>
-              </div>
-            )}
+          {result && (
+           <div className="space-y-4">
+             <h3 className="text-lg font-semibold mb-2">Extracted Data:</h3>
+             <InvoiceFormEditor
+               extractedData={result}
+               onSubmit={(updatedData) => {
+                 // Update the result with the new data
+                 setResult(updatedData);
+               }}
+               onCancel={() => {
+                 // Optional: Handle cancel action
+               }}
+             />
+             
+             <div className="mt-4">
+               <InvoiceDataHandler 
+                 invoiceData={result}
+                 onSuccess={() => {
+                   // Handle success
+                 }}
+                 onError={(error) => {
+                   console.error('Failed to save invoice:', error);
+                 }}
+               />
+             </div>
+           </div>
+         )}
           </div>
         </div>
       </CardContent>
