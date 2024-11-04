@@ -24,39 +24,67 @@ const Login = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
-        // Clear error when user starts typing
         if (error) setError(null);
+    };
+
+    const insertUserIfNeeded = async (user) => {
+        try {
+            // First check if user exists
+            const { data: existingUser, error: fetchError } = await supabase
+                .from('users')
+                .select('id')  // Only select id for existence check
+                .eq('id', user.id)
+                .maybeSingle(); // Use maybeSingle() instead of single()
+    
+            if (fetchError) throw fetchError;
+    
+            // If user doesn't exist, create them
+            if (!existingUser) {
+                const { error: insertError } = await supabase
+                    .from('users')
+                    .upsert([  // Use upsert instead of insert to handle race conditions
+                        {
+                            id: user.id,
+                            email: user.email,
+                            created_at: new Date().toISOString(),
+                        }
+                    ], {
+                        onConflict: 'id'  // Specify the conflict resolution column
+                    });
+    
+                if (insertError) throw insertError;
+            }
+    
+            return true;
+        } catch (err) {
+            console.error('User management error:', err);
+            setError('Error managing user account');
+            return false;
+        }
     };
 
     const handleEmailLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
-
+    
         try {
-            // Basic validation
             if (!formData.email || !formData.password) {
                 throw new Error('Please fill in all fields');
             }
-
+    
             const { data, error: signInError } = await supabase.auth.signInWithPassword({
                 email: formData.email,
                 password: formData.password,
             });
-
-            if (signInError) {
-                // Handle specific error cases
-                switch (signInError.message) {
-                    case 'Invalid login credentials':
-                        throw new Error('Invalid email or password');
-                    case 'Email not confirmed':
-                        throw new Error('Please verify your email address');
-                    default:
-                        throw new Error(signInError.message);
-                }
-            }
-
+    
+            if (signInError) throw signInError;
+    
             if (data?.user) {
+                const userCreated = await insertUserIfNeeded(data.user);
+                if (!userCreated) {
+                    throw new Error('Failed to create user profile');
+                }
                 navigate('/dashboard');
             }
         } catch (err) {
@@ -66,7 +94,6 @@ const Login = () => {
             setLoading(false);
         }
     };
-
     const handleGoogleLogin = async () => {
         try {
             const { data, error } = await supabase.auth.signInWithOAuth({
@@ -77,13 +104,16 @@ const Login = () => {
             });
 
             if (error) throw error;
+
+            if (data?.user) {
+                await insertUserIfNeeded(data.user);
+            }
         } catch (err) {
             console.error('Google login error:', err);
             setError(err.message);
         }
     };
 
-    // Function to create a test account (temporary, remove in production)
     const handleCreateTestAccount = async () => {
         try {
             setLoading(true);
@@ -105,7 +135,6 @@ const Login = () => {
 
     return (
         <div className="flex flex-col md:flex-row h-screen w-full">
-            {/* Left Section (Image and Welcome Text) */}
             <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col items-center justify-center bg-gray-100 p-6 relative">
                 <div className="absolute inset-0">
                     <img
@@ -128,7 +157,6 @@ const Login = () => {
                 </div>
             </div>
 
-            {/* Right Section (Login Form) */}
             <div className="md:w-1/2 w-full h-full flex items-center justify-center p-8">
                 <form className="w-full max-w-md space-y-6" onSubmit={handleEmailLogin}>
                     <h2 className="text-3xl font-bold text-center text-gray-800">Receipt<span className="text-blue-600">Vision</span></h2>
@@ -136,14 +164,12 @@ const Login = () => {
                         Login in
                     </Typography>
 
-                    {/* Error Message */}
                     {error && (
                         <div className="p-3 text-red-500 bg-red-50 rounded-md text-sm">
                             {error}
                         </div>
                     )}
 
-                    {/* Google Sign In Button */}
                     <Button
                         variant="outlined"
                         fullWidth
@@ -153,10 +179,9 @@ const Login = () => {
                         <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"></img>
                         <span>Login with Google</span>
                     </Button>
-                    
+
                     <Divider className="my-4">OR</Divider>
 
-                    {/* Email Field */}
                     <TextField 
                         label="Email Address" 
                         name="email"
@@ -168,7 +193,6 @@ const Login = () => {
                         required 
                     />
 
-                    {/* Password Field */}
                     <TextField
                         label="Password"
                         name="password"
@@ -189,14 +213,12 @@ const Login = () => {
                         }}
                     />
 
-                    {/* Forgot Password Link */}
                     <div className="text-right">
                         <Link href="/forgot-password" color="primary" underline="hover">
                             Forgot your password?
                         </Link>
                     </div>
 
-                    {/* Submit Button with Gradient */}
                     <button
                         type="submit"
                         disabled={loading}
@@ -210,7 +232,6 @@ const Login = () => {
                         {loading ? 'Signing in...' : 'Sign in'}
                     </button>
 
-                    {/* Temporary: Create Test Account Button */}
                     <button
                         type="button"
                         onClick={handleCreateTestAccount}
@@ -219,7 +240,6 @@ const Login = () => {
                         Create Test Account
                     </button>
 
-                    {/* Sign Up Link */}
                     <Typography variant="body2" className="text-center text-gray-600 mt-4">
                         Don't have an account?{' '}
                         <Link href="/signup" color="primary" underline="hover">
