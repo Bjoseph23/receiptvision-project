@@ -13,7 +13,6 @@ import InvoiceProcessor from "./InvoiceProcessor";
 import LogoutPopup from "./LogoutPopup";
 import { useAuth } from "../contexts/AuthContext";
 import supabase from "../components/supabaseClient";
-import InvoiceProcessor from "./InvoiceProcessor"; // Import the invoice processor
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(true);
