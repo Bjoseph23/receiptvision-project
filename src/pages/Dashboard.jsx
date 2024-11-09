@@ -23,34 +23,33 @@ const Dashboard = () => {
     averageMonthlyExpenses: 0,
   });
 
-// In Dashboard.jsx
-useEffect(() => {
-  const fetchUserInfo = async () => {
+  // Fetch user information
+  useEffect(() => {
+    const fetchUserInfo = async () => {
       if (user) {
-          try {
-              const { data, error } = await supabase
-                  .from("users")
-                  .select("email, id")  // Specify exactly what we want to select
-                  .eq("id", user.id)
-                  .maybeSingle();  // Use maybeSingle() instead of single()
+        try {
+          const { data, error } = await supabase
+            .from("users")
+            .select("name, id")
+            .eq("id", user.id)
+            .maybeSingle();
 
-              if (error) throw error;
-              if (data) {
-                  setUserInfo({ name: data.email });
-              }
-          } catch (error) {
-              console.error("Error fetching user data:", error.message);
-              // If user doesn't exist, try to create them
-              try {
-                  await insertUserIfNeeded(user);
-              } catch (insertError) {
-                  console.error("Error creating user:", insertError);
-              }
+          if (error) throw error;
+          if (data) {
+            setUserInfo({ name: data.name });
           }
+        } catch (error) {
+          console.error("Error fetching user data:", error.message);
+          try {
+            await insertUserIfNeeded(user);
+          } catch (insertError) {
+            console.error("Error creating user:", insertError);
+          }
+        }
       }
-  };
-  fetchUserInfo();
-}, [user]);
+    };
+    fetchUserInfo();
+  }, [user]);
 
   // Fetch dashboard data
   useEffect(() => {
@@ -59,7 +58,6 @@ useEffect(() => {
 
       setLoading(true);
       try {
-        // Get last 6 months date
         const sixMonthsAgo = new Date();
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
@@ -171,9 +169,9 @@ useEffect(() => {
   }
 
   return (
-    <div className="flex-1 pl-10 pt-10 p-6 bg-gray-100">
+    <div className="flex-1 pl-10 pt-10 p-6 bg-gray-100 overflow-auto">
       <h1 className="text-4xl font-bold text-blue-600 mb-2">
-        <span className="text-blue-600">Welcome Back </span>
+        <span className="text-blue-600">Welcome Back,   </span>
         <span className="text-black">{userInfo.name || "User Name"}</span>
       </h1>
       <h2 className="text-xl font-semibold mt-7 mb-6">Dashboard</h2>

@@ -48,7 +48,7 @@ const NavBar = () => {
         try {
           const { data, error } = await supabase
             .from("users")
-            .select("email")
+            .select("name")
             .eq("id", user.id)
             .single();
 
@@ -79,11 +79,10 @@ const NavBar = () => {
   return (
     <div className="flex m-0 p-0 pr-0">
       <div
-        className={`${
-          isOpen ? "w-64" : "w-20"
-        } bg-gray-200 h-screen p-0 m-0 pt-8 pl-2 pr-2 relative duration-300`}
+        className={`${isOpen ? "w-64" : "w-20"
+          } bg-gray-200 min-h-screen p-0 m-0 pt-8 pl-2 pr-2 relative duration-300 flex flex-col justify-between overflow-y-auto`}
       >
-        <div className="absolute top-2 left-3 ml-2 cursor-pointer p-2" onClick={toggleNav}>
+        <div className="absolute top-2 left-3 ml-2 cursor-pointer p-2 pl-1.5" onClick={toggleNav}>
           <MenuIcon fontSize="large" />
         </div>
 
@@ -95,9 +94,13 @@ const NavBar = () => {
             </h1>
           </div>
         )}
-
-        <div className="flex items-center gap-x-4 mt-6 pl-3">
-          <img src="https://placehold.co/60" alt="User Avatar" className="w-12 h-12 rounded-full" />
+        
+        <div className="pt-2 flex items-center gap-x-4 mt-6 pl-3">
+        <img
+          className="w-12 h-12 rounded-full"
+          src="https://excellence.truman.edu/files/2022/02/Photo-Placeholder-Image-150x150-1.jpg"
+          alt="Profile"
+        />
           {isOpen && <h1 className="text-xl font-bold whitespace-nowrap">{userInfo.name || 'User Name'}</h1>}
         </div>
 
@@ -108,30 +111,27 @@ const NavBar = () => {
               key={item.id}
               onClick={() => setActiveItem(item.id)}
               className={`relative flex items-center justify-start gap-x-4 p-2 cursor-pointer rounded-md 
-                ${
-                  activeItem === item.id
-                    ? "bg-blue-200 text-blue-900 font-bold"
-                    : "text-gray-600"
+                ${activeItem === item.id
+                  ? "bg-blue-200 text-blue-900 font-bold"
+                  : "text-gray-600"
                 } hover:bg-blue-50 transition-all duration-300`}
             >
               <span className="flex-shrink-0 text-xl">{item.icon}</span>
-              {isOpen && (
-                <span className="origin-left duration-200">{item.label}</span>
-              )}
+              {isOpen && <span className="origin-left duration-200">{item.label}</span>}
             </NavLink>
           ))}
         </ul>
 
         <div className="mt-6 pr-2 pl-1">
-          <button 
-            className="flex items-center w-full gap-x-4 p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+          <button
+            className="flex items-center w-full gap-x-4 p-2 rounded-xl bg-blue-600 text-white hover:text-white  hover:bg-blue-900"
             onClick={() => setShowInvoiceProcessor(true)}
           >
             <ReceiptIcon fontSize="large" />
             {isOpen && <span>Scan Receipt with AI</span>}
           </button>
 
-          <button className="flex items-center w-full gap-x-4 p-2 mt-2 rounded-md bg-blue-100 text-blue-600 hover:bg-blue-200">
+          <button className="flex items-center w-full rounded-xl gap-x-4 p-2 mt-2 rounded-md bg-blue-200 text-blue-600 hover:text-white hover:bg-blue-400">
             <UploadIcon fontSize="large" />
             {isOpen && <span className="font-bold">Upload Document</span>}
           </button>
@@ -143,10 +143,9 @@ const NavBar = () => {
               to="/settings"
               onClick={() => setActiveItem("settings")}
               className={`relative flex items-center gap-x-4 pt-3 pl-1 pb-2 cursor-pointer rounded-md
-                ${
-                  activeItem === "settings"
-                    ? "bg-blue-100 text-blue-800 font-bold"
-                    : "text-gray-600"
+                ${activeItem === "settings"
+                  ? "bg-blue-100 text-blue-800 font-bold"
+                  : "text-gray-600"
                 } hover:bg-blue-50 transition-all duration-300`}
             >
               <SettingsIcon fontSize="large" />
@@ -168,7 +167,7 @@ const NavBar = () => {
           <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
             <div className="p-4 flex justify-between items-center border-b">
               <h2 className="text-xl font-bold">Scan Receipt</h2>
-              <button 
+              <button
                 onClick={() => setShowInvoiceProcessor(false)}
                 className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
               >

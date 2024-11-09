@@ -27,7 +27,7 @@ function AppContent() {
     const [isNavBarVisible, setIsNavBarVisible] = useState(true);
 
     // Paths where NavBar should be hidden
-    const hideNavBarPaths = ['/login', '/Login', '/signup', '/Signup'];
+    const hideNavBarPaths = ['/login', '/Login','/forgot-password', '/signup', '/Signup'];
 
     // Update NavBar visibility based on current path
     useEffect(() => {

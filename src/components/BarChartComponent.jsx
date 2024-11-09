@@ -1,13 +1,41 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
-const BarChartComponent = ({ title, data, className }) => {
+const BarChartComponent = ({ title, data = {}, className }) => {
   const chartData = [
-    { name: "Monday", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Tuesday", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Wednesday", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Thursay", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Friday", income: data.income || 0, expenses: data.expenses || 0 },
+    {
+      name: "Monday",
+      income: data.income?.monday || 0,
+      expenses: data.expenses?.monday || 0,
+    },
+    {
+      name: "Tuesday",
+      income: data.income?.tuesday || 0,
+      expenses: data.expenses?.tuesday || 0,
+    },
+    {
+      name: "Wednesday",
+      income: data.income?.wednesday || 0,
+      expenses: data.expenses?.wednesday || 0,
+    },
+    {
+      name: "Thursday",
+      income: data.income?.thursday || 0,
+      expenses: data.expenses?.thursday || 0,
+    },
+    {
+      name: "Friday",
+      income: data.income?.friday || 0,
+      expenses: data.expenses?.friday || 0,
+    },
   ];
 
   return (

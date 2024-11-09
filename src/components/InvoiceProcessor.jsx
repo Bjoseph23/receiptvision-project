@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { Alert, AlertDescription } from "./ui/alert";
 import { Loader2 } from "lucide-react";
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -154,7 +155,8 @@ const InvoiceProcessor = () => {
               disabled={!selectedFile || processing}
               className="w-full"
             >
-              {processing ? (
+<AutoAwesomeIcon fontSize="large" style={{ color: "linear-gradient(45deg, #8a3ffc, #00c6ff)" }} />
+{processing ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...
