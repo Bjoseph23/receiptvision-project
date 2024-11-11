@@ -3,7 +3,7 @@ import LineChartComponent from "../components/LineChartComponent";
 import BarChartComponent from "../components/BarChartComponent";
 import PieChartComponent from "../components/PieChartComponent";
 
-const Expenditure = () => {
+const Analytics = () => {
   const [data, setData] = useState({
     spending: 500,
     income: 1000,
@@ -74,4 +74,4 @@ const Expenditure = () => {
   );
 };
 
-export default Expenditure;
+export default Analytics;

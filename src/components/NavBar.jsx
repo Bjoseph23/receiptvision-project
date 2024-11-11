@@ -15,7 +15,7 @@ import { useAuth } from "../contexts/AuthContext";
 import supabase from "../components/supabaseClient";
 
 const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("dashboard");
   const [showInvoiceProcessor, setShowInvoiceProcessor] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);

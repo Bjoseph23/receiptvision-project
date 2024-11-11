@@ -7,7 +7,7 @@ import NavBar from './components/NavBar';
 import Dashboard from './pages/Dashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Expenditure from './pages/Expenditure';
+import Analytics from './pages/Analytics';
 import TermsAndPolicy from './components/TermsAndPolicy';
 import OneTapComponent from './components/OneTapComponent';
 import NotFoundPage from './pages/NotFoundPage';
@@ -58,10 +58,10 @@ function AppContent() {
                         }
                     />
                     <Route
-                        path="/expenditure"
+                        path="/analytics"
                         element={
                             <ProtectedRoute>
-                                <Expenditure />
+                                <Analytics />
                             </ProtectedRoute>
                         }
                     />
@@ -74,7 +74,7 @@ function AppContent() {
                         }
                     />
                     <Route
-                        path="/analytics"
+                        path="/expenditure"
                         element={
                             <ProtectedRoute>
                             </ProtectedRoute>
@@ -94,9 +94,7 @@ function AppContent() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     
-                    {/* 404 Not Found Page */}
                     <Route
                         path="*"
                         element={<NotFoundPage />}

@@ -6,7 +6,7 @@ const AverageSpending = ({ spending = 0, income = 0, expenses = 0 }) => {
     <div className="p-6 bg-blue-100 rounded-lg shadow-md">
       <h3 className="text-xl font-semibold mb-4">Average Spending</h3>
       <div className="text-4xl font-bold text-gray-800 mb-2">
-        KSh {spending.toFixed(2)}
+        KSh {spending.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
       </div>
 
       <div className="flex justify-between items-center">
@@ -15,7 +15,7 @@ const AverageSpending = ({ spending = 0, income = 0, expenses = 0 }) => {
           </div>
           <div>
             <span className="text-sm text-gray-500">Income</span>
-            <div className="text-lg font-semibold">KSh {income.toFixed(2)}</div>
+            <div className="text-lg font-semibold">KSh {income.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           </div>
         </div>
 
@@ -24,7 +24,7 @@ const AverageSpending = ({ spending = 0, income = 0, expenses = 0 }) => {
           </div>
           <div>
             <span className="text-sm text-gray-500">Expenses</span>
-            <div className="text-lg font-semibold">KSh {expenses.toFixed(2)}</div>
+            <div className="text-lg font-semibold">KSh {expenses.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           </div>
         </div>
       </div>

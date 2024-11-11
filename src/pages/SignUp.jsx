@@ -4,6 +4,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import supabase from '../components/supabaseClient';
 import zxcvbn from 'zxcvbn';
 
 const SignUp = () => {
@@ -25,6 +26,26 @@ const SignUp = () => {
         const newPassword = e.target.value;
         setPassword(newPassword);
         setPasswordStrength(zxcvbn(newPassword).score);
+    };
+
+    const handleGoogleLogin = async () => {
+        try {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}/dashboard`
+                }
+            });
+
+            if (error) throw error;
+
+            if (data?.user) {
+                await insertUserIfNeeded(data.user);
+            }
+        } catch (err) {
+            console.error('Google login error:', err);
+            setError(err.message);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -52,16 +73,12 @@ const SignUp = () => {
         }
     };
 
-    const handleGoogleLogin = () => {
-        console.log("Sign up with Google triggered");
-    };
-
     return (
         <div className="flex flex-col md:flex-row w-full h-screen overflow-auto">
             {/* Left Section (Form) */}
             <div className="md:w-1/2 w-full flex items-center justify-center p-8">
                 <form onSubmit={handleSubmit} className="w-full mt-10 max-w-md space-y-6">
-                    <h2 className="text-2xl font-bold text-gray-800">Create an account</h2>
+                    <h2 className="text-2xl md:text-4xl font-bold text-gray-800">Create an account</h2>
 
                     {/* Error Message */}
                     {error && (
@@ -147,28 +164,35 @@ const SignUp = () => {
                             ),
                         }}
                     />
+                    <div className="flex items-center">
+                        <hr className="flex-1 border-gray-700" />
+                        <span className="mx-4 text-gray-700">OR</span>
+                        <hr className="flex-1 border-gray-700" />
+                    </div>
+
+
 
                     {/* Google Sign-Up Button */}
                     <Button
                         variant="outlined"
                         fullWidth
                         onClick={handleGoogleLogin}
-                        className="px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
+                        className="px-4 py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
                     >
-                        <img className="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo" />
-                        <span>Sign up with Google</span>
+                        <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"></img>
+                        <span>Sign Up with Google</span>
                     </Button>
 
                     {/* Terms of Use and Privacy Policy */}
-                    <Typography variant="body2" className="text-gray-600 text-center">
+                    <Typography variant="body2" className="text-gray-600 text-center md:text-lg">
                         By creating an account, you agree to our{' '}
-                        <Link href="#" color="primary" underline="hover">Terms of use & Privacy Policy</Link> 
+                        <Link href="#" color="primary" underline="hover">Terms of use & Privacy Policy</Link>
                     </Typography>
 
                     {/* Simulated reCAPTCHA */}
                     <Box className="border border-gray-300 rounded-lg p-4 flex items-center">
                         <Checkbox color="primary" required />
-                        <span className="text-gray-600">I'm not a robot</span>
+                        <span className="text-gray-600 md:text-lg">I'm not a robot</span>
                         <Box className="ml-auto">
                             <img src="https://placehold.co/70x70?text=reCAPTCHA" alt="reCAPTCHA logo" />
                         </Box>
@@ -177,7 +201,7 @@ const SignUp = () => {
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        className="w-full rounded-full text-white font-bold text-lg transform transition-transform duration-200 hover:scale-105"
+                        className="w-full rounded-full text-white font-bold text-lg md:text-xl transform transition-transform duration-200 hover:scale-105"
                         style={{
                             background: 'linear-gradient(to right, #4A00E0, #8E2DE2)',
                             padding: '12px 0',
@@ -188,7 +212,7 @@ const SignUp = () => {
                     </button>
 
                     {/* Login Link */}
-                    <Typography variant="body2" className="text-center text-gray-600 mt-4">
+                    <Typography variant="body2" className="text-center text-gray-600 mt-4 md:text-4xl ">
                         Already have an account?{' '}
                         <Link href="#" color="primary" underline="hover" onClick={() => navigate('/login')}>Log in</Link>
                     </Typography>
@@ -205,8 +229,8 @@ const SignUp = () => {
                 />
                 <div className="absolute top-8 left-8 md:top-1/4 md:left-1/4 p-4 text-left">
                     <div className="text-left">
-                        <div className="text-5xl font-bold text-gray-900">•</div>
-                        <h1 className="text-4xl font-bold text-gray-800 mt-2">
+                        <div className="text-5xl md:text-6xl font-bold text-gray-900">•</div>
+                        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mt-2">
                             Welcome to <span className="text-blue-600">ReceiptVision</span>
                         </h1>
                     </div>

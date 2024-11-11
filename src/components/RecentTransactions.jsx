@@ -1,5 +1,5 @@
 import React from "react";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 const RecentTransactions = ({ transactions }) => {
   return (
@@ -14,9 +14,10 @@ const RecentTransactions = ({ transactions }) => {
             >
               <div>
                 <p className="text-sm">{transaction.date}</p>
-                <p className="font-semibold">${transaction.amount}</p>
+                <p className="font-semibold">Ksh {transaction.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+
               </div>
-              <ArrowForwardIcon />
+              <SwapHorizIcon />
             </li>
           ))
         ) : (
