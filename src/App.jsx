@@ -27,16 +27,11 @@ function AppContent() {
     const [isNavBarVisible, setIsNavBarVisible] = useState(true);
 
     // Paths where NavBar should be hidden
-    const hideNavBarPaths = ['/login', '/Login','/forgot-password', '/signup', '/Signup'];
+    const hideNavBarPaths = ['/login', '/forgot-password', '/signup'];
 
     // Update NavBar visibility based on current path
     useEffect(() => {
-        // Check if the current path is in the hideNavBarPaths array or is an unmatched route (404)
-        if (hideNavBarPaths.includes(location.pathname) || location.pathname === '/404') {
-            setIsNavBarVisible(false);
-        } else {
-            setIsNavBarVisible(true);
-        }
+        setIsNavBarVisible(!hideNavBarPaths.includes(location.pathname) && location.pathname !== '/404');
     }, [location.pathname]);
 
     return (
@@ -46,6 +41,7 @@ function AppContent() {
                 <OneTapComponent />
                 
                 <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -73,32 +69,7 @@ function AppContent() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route
-                        path="/expenditure"
-                        element={
-                            <ProtectedRoute>
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/settings"
-                        element={
-                            <ProtectedRoute>
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/goals"
-                        element={
-                            <ProtectedRoute>
-                            </ProtectedRoute>
-                        }
-                    />
-                    
-                    <Route
-                        path="*"
-                        element={<NotFoundPage />}
-                    />
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </div>
         </div>
