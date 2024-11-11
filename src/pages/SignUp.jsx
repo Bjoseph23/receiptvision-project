@@ -220,9 +220,9 @@ const SignUp = () => {
             </div>
 
             {/* Right Section (Image with Overlay Text) */}
-            <div className="relative md:w-1/2 w-full h-1/2 md:h-full bg-gray-100 flex items-center justify-center order-first md:order-last">
+            <div className="relative md:w-1/2 w-full h-1/2 md:h-full h bg-gray-100 flex items-center justify-center order-first md:order-last">
                 <img
-                    src="https://placehold.co/720x720?text=Signup+Image"
+                    src="src/assets/signup-image.png"
                     alt="Person using laptop and calculator"
                     className="w-full h-full object-cover"
                     onError={(e) => { e.target.src = "https://placehold.co/720x720?text=Signup+Image"; }}

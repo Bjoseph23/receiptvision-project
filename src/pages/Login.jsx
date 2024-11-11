@@ -14,7 +14,7 @@ const Login = () => {
         email: '',
         password: ''
     });
-    
+
     const navigate = useNavigate();
 
     const handleTogglePassword = () => setShowPassword(!showPassword);
@@ -35,9 +35,9 @@ const Login = () => {
                 .select('id')  // Only select id for existence check
                 .eq('id', user.id)
                 .maybeSingle(); // Use maybeSingle() instead of single()
-    
+
             if (fetchError) throw fetchError;
-    
+
             // If user doesn't exist, create them
             if (!existingUser) {
                 const { error: insertError } = await supabase
@@ -51,10 +51,10 @@ const Login = () => {
                     ], {
                         onConflict: 'id'  // Specify the conflict resolution column
                     });
-    
+
                 if (insertError) throw insertError;
             }
-    
+
             return true;
         } catch (err) {
             console.error('User management error:', err);
@@ -67,19 +67,19 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         setError(null);
-    
+
         try {
             if (!formData.email || !formData.password) {
                 throw new Error('Please fill in all fields');
             }
-    
+
             const { data, error: signInError } = await supabase.auth.signInWithPassword({
                 email: formData.email,
                 password: formData.password,
             });
-    
+
             if (signInError) throw signInError;
-    
+
             if (data?.user) {
                 const userCreated = await insertUserIfNeeded(data.user);
                 if (!userCreated) {
@@ -135,16 +135,16 @@ const Login = () => {
 
     return (
         <div className="flex flex-col md:flex-row h-screen w-full">
-            <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col items-center justify-center bg-gray-100 p-6 relative">
+            <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col items-start justify-start bg-gray-100 p-6 relative">
                 <div className="absolute inset-0">
                     <img
-                        src="/assets/login-image.png"
+                        src="src/assets/login-image.png"
                         alt="Person holding laptop"
                         className="w-full h-full object-cover"
                         onError={(e) => { e.target.src = "https://placehold.co/720x1040?text=Login+Image"; }}
                     />
                 </div>
-                <div className="relative z-10 text-left p-8 bg-opacity-75">
+                <div className="relative z-10 text-left p-8 bg-opacity-75 mt-8 ml-8">
                     <div className="flex items-center space-x-2 mb-4 md:mb-8">
                         <div className="w-3 h-3 bg-white rounded-full"></div>
                         <h1 className="text-3xl font-bold text-white">
@@ -175,22 +175,22 @@ const Login = () => {
                         fullWidth
                         onClick={handleGoogleLogin}
                         className="px-4 py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
-                        >
+                    >
                         <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"></img>
                         <span>Login with Google</span>
                     </Button>
 
                     <Divider className="my-4">OR</Divider>
 
-                    <TextField 
-                        label="Email Address" 
+                    <TextField
+                        label="Email Address"
                         name="email"
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
-                        fullWidth 
-                        variant="outlined" 
-                        required 
+                        fullWidth
+                        variant="outlined"
+                        required
                     />
 
                     <TextField
