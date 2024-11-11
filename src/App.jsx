@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Expenditure from './pages/Expenditure';
 import TermsAndPolicy from './components/TermsAndPolicy';
 import OneTapComponent from './components/OneTapComponent';
+import GoalsAndTips from './pages/GoalsAndTips';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -91,6 +92,7 @@ function AppContent() {
                         path="/goals"
                         element={
                             <ProtectedRoute>
+                                <GoalsAndTips />
                             </ProtectedRoute>
                         }
                     />
