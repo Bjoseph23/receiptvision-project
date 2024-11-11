@@ -82,7 +82,7 @@ const NavBar = () => {
         className={`${isOpen ? "w-64" : "w-20"
           } bg-gray-200 min-h-screen p-0 m-0 pt-8 pl-2 pr-2 relative duration-300 flex flex-col justify-between overflow-y-auto`}
       >
-        <div className="absolute top-2 left-3 ml-2 cursor-pointer p-2 pl-1.5" onClick={toggleNav}>
+        <div className="absolute pl-1 top-2 left-3 ml-2 cursor-pointer p-2 pl-1.5" onClick={toggleNav}>
           <MenuIcon fontSize="large" />
         </div>
 
@@ -94,13 +94,13 @@ const NavBar = () => {
             </h1>
           </div>
         )}
-        
-        <div className="pt-2 flex items-center gap-x-4 mt-6 pl-3">
-        <img
-          className="w-12 h-12 rounded-full"
-          src="https://excellence.truman.edu/files/2022/02/Photo-Placeholder-Image-150x150-1.jpg"
-          alt="Profile"
-        />
+
+        <div className="pt-2 flex items-center gap-x-4 mt-6 pl-1">
+          <img
+            className="w-12 h-12 rounded-full"
+            src="https://excellence.truman.edu/files/2022/02/Photo-Placeholder-Image-150x150-1.jpg"
+            alt="Profile"
+          />
           {isOpen && <h1 className="text-xl font-bold whitespace-nowrap">{userInfo.name || 'User Name'}</h1>}
         </div>
 
@@ -112,7 +112,7 @@ const NavBar = () => {
               onClick={() => setActiveItem(item.id)}
               className={`relative flex items-center justify-start gap-x-4 p-2 cursor-pointer rounded-md 
                 ${activeItem === item.id
-                  ? "bg-blue-200 text-blue-900 font-bold"
+                  ? " pl-1 bg-blue-200 text-blue-900 font-bold"
                   : "text-gray-600"
                 } hover:bg-blue-50 transition-all duration-300`}
             >
@@ -124,14 +124,14 @@ const NavBar = () => {
 
         <div className="mt-6 pr-2 pl-1">
           <button
-            className="flex items-center w-full gap-x-4 p-2 rounded-xl bg-blue-600 text-white hover:text-white  hover:bg-blue-900"
+            className="flex items-center justify-start w-full pl-1 gap-x-4 p-3 rounded-xl bg-blue-600 text-white hover:bg-blue-900 transition-all duration-300"
             onClick={() => setShowInvoiceProcessor(true)}
           >
             <ReceiptIcon fontSize="large" />
             {isOpen && <span>Scan Receipt with AI</span>}
           </button>
 
-          <button className="flex items-center w-full rounded-xl gap-x-4 p-2 mt-2 rounded-md bg-blue-200 text-blue-600 hover:text-white hover:bg-blue-400">
+          <button className="flex items-center justify-start w-full gap-x-4 p-3 pl-1 mt-2 rounded-xl bg-blue-200 text-blue-600 hover:bg-blue-400 transition-all duration-300">
             <UploadIcon fontSize="large" />
             {isOpen && <span className="font-bold">Upload Document</span>}
           </button>
@@ -142,9 +142,9 @@ const NavBar = () => {
             <NavLink
               to="/settings"
               onClick={() => setActiveItem("settings")}
-              className={`relative flex items-center gap-x-4 pt-3 pl-1 pb-2 cursor-pointer rounded-md
+              className={`relative flex pl-1 items-center gap-x-4 pt-3 pl-1 pb-2 cursor-pointer rounded-md
                 ${activeItem === "settings"
-                  ? "bg-blue-100 text-blue-800 font-bold"
+                  ? "bg-blue-100 pl-1 text-blue-800 font-bold"
                   : "text-gray-600"
                 } hover:bg-blue-50 transition-all duration-300`}
             >
