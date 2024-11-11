@@ -22,6 +22,7 @@ const Dashboard = () => {
     averageMonthlyIncome: 0,
     averageMonthlyExpenses: 0,
   });
+  const [categoryMap, setCategoryMap] = useState({});
 
   // Fetch user information
   useEffect(() => {
@@ -40,16 +41,36 @@ const Dashboard = () => {
           }
         } catch (error) {
           console.error("Error fetching user data:", error.message);
-          try {
-            await insertUserIfNeeded(user);
-          } catch (insertError) {
-            console.error("Error creating user:", insertError);
-          }
         }
       }
     };
     fetchUserInfo();
   }, [user]);
+
+  // Fetch expense categories to map category IDs to category names
+  useEffect(() => {
+    const fetchExpenseCategories = async () => {
+      try {
+        const { data: categories, error } = await supabase
+          .from("expense_categories")
+          .select("id, name");
+
+        if (error) throw error;
+
+        // Create a mapping of category ID to category name
+        const categoryMapping = {};
+        categories.forEach((category) => {
+          categoryMapping[category.id] = category.name;
+        });
+
+        setCategoryMap(categoryMapping);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      }
+    };
+
+    fetchExpenseCategories();
+  }, []);
 
   // Fetch dashboard data
   useEffect(() => {
@@ -64,11 +85,7 @@ const Dashboard = () => {
         // Fetch income data
         const { data: incomeData, error: incomeError } = await supabase
           .from("income")
-          .select(`
-            amount,
-            income_date,
-            income_sources (name)
-          `)
+          .select("amount, income_date, income_sources (name)")
           .eq("user_id", user.id)
           .gte("income_date", sixMonthsAgo.toISOString())
           .order("income_date", { ascending: false });
@@ -78,12 +95,7 @@ const Dashboard = () => {
         // Fetch expenses data
         const { data: expensesData, error: expensesError } = await supabase
           .from("expenses")
-          .select(`
-            amount,
-            transaction_date,
-            description,
-            expense_categories (name)
-          `)
+          .select("amount, category_id, transaction_date, description, expense_categories (name)")
           .eq("user_id", user.id)
           .gte("transaction_date", sixMonthsAgo.toISOString())
           .order("transaction_date", { ascending: false });
@@ -110,11 +122,17 @@ const Dashboard = () => {
         const monthlyIncome = processMonthlyData(incomeData, "income_date");
         const monthlyExpenses = processMonthlyData(expensesData, "transaction_date");
 
+        // Attach category name to each transaction
+        const recentTransactions = expensesData.slice(0, 5).map((transaction) => ({
+          ...transaction,
+          category_name: categoryMap[transaction.category_id] || "Unknown Category",
+        }));
+
         setDashboardData({
           income: monthlyIncome,
           expenses: monthlyExpenses,
           categories: categoryData,
-          recentTransactions: [...expensesData.slice(0, 5)],
+          recentTransactions,
           totalIncome,
           totalExpenses,
           averageMonthlyIncome: totalIncome / 6,
@@ -128,7 +146,7 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, [user]);
+  }, [user, categoryMap]);
 
   // Helper function to process monthly data
   const processMonthlyData = (data, dateField) => {
@@ -171,7 +189,7 @@ const Dashboard = () => {
   return (
     <div className="flex-1 pl-10 pt-10 p-6 bg-gray-100 overflow-auto">
       <h1 className="text-4xl font-bold text-blue-600 mb-2">
-        <span className="text-blue-600">Welcome Back,   </span>
+        <span className="text-blue-600">Welcome Back, </span>
         <span className="text-black">{userInfo.name || "User Name"}</span>
       </h1>
       <h2 className="text-xl font-semibold mt-7 mb-6">Dashboard</h2>
