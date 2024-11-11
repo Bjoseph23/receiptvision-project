@@ -5,6 +5,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../components/supabaseClient';
+import loginImage from '../assets/login-image.png';
+
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -138,7 +140,7 @@ const Login = () => {
             <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col items-start justify-start bg-gray-100 p-6 relative">
                 <div className="absolute inset-0">
                     <img
-                        src="src/assets/login-image.png"
+                        src={loginImage}
                         alt="Person holding laptop"
                         className="w-full h-full object-cover"
                         onError={(e) => { e.target.src = "https://placehold.co/720x1040?text=Login+Image"; }}

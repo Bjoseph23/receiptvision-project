@@ -6,6 +6,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../components/supabaseClient';
 import zxcvbn from 'zxcvbn';
+import signupImage from '../assets/signup-image.png';
+
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -222,7 +224,7 @@ const SignUp = () => {
             {/* Right Section (Image with Overlay Text) */}
             <div className="relative md:w-1/2 w-full h-1/2 md:h-full h bg-gray-100 flex items-center justify-center order-first md:order-last">
                 <img
-                    src="src/assets/signup-image.png"
+                    src={signupImage}
                     alt="Person using laptop and calculator"
                     className="w-full h-full object-cover"
                     onError={(e) => { e.target.src = "https://placehold.co/720x720?text=Signup+Image"; }}
