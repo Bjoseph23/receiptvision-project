@@ -80,7 +80,24 @@ const InvoiceProcessor = () => {
             },
             "category": string
           }
-          If any field is not found, use null.`
+          If any field is not found, use null. for the category, look through the name of the cateory in the image. If the item name corresponds to the the desctiption pair as listed below, assign the value of category respectively (name of the categoty of the items, items that they fall under the category):
+          ('Housing and Utilities', 'Rent/Mortgage, Property Taxes, Home Maintenance/Repairs, Furniture & Appliances, Home Improvement Supplies, Cleaning Supplies, Utility Bills, Security Systems'),
+('Groceries & Food', 'Groceries, Beverages, Dining Out/Restaurant Bills, Snacks & Confectionery, Meal Delivery Services, Alcohol & Spirits'),
+('Transportation', 'Fuel/Gasoline, Car Payment/Lease, Car Maintenance/Repairs, Public Transportation, Vehicle Insurance, Parking Fees/Tolls, Ride-sharing services'),
+('Healthcare & Personal Care', 'Medical Expenses, Health Insurance, Medications/Pharmacy, Dental Care, Vision Care, Personal Hygiene Products, Beauty Products, Gym Memberships, Mental Health'),
+('Insurance', 'Health Insurance, Home Insurance, Car Insurance, Business Insurance, Life Insurance, Disability Insurance'),
+('Entertainment & Leisure', 'Streaming Services, Movies/Concert Tickets, Books/Magazines, Video Games, Sports Equipment/Activities, Hobbies & Crafts, Toys/Games, Event Tickets'),
+('Education', 'Tuition Fees, Books & School Supplies, Online Courses & Training, Seminars/Workshops, Student Loan Payments, Professional Development Programs'),
+('Clothing & Accessories', 'Apparel, Footwear, Jewelry & Watches, Handbags & Accessories, Workwear/Uniforms, Sportswear/Activewear'),
+('Technology & Electronics', 'Computers & Laptops, Smartphones & Tablets, Software & Apps, Printers/Office Equipment, Wearables, Cameras & Photography Equipment, Video/Audio Equipment, Gadgets & Accessories, Subscriptions to Software Services (e.g., Adobe)'),
+('Office Supplies & Stationery', 'Paper Products, Pens, Notebooks, and Folders, Office Furniture, Printer Ink/Cartridges, Mailing Supplies'),
+('Business Expenses', 'Advertising & Marketing, Office Space Rent, Employee Salaries, Business Meals & Entertainment, Travel Expenses, Utilities (business-specific), Inventory & Supplies, Software & Licensing Fees, Client Gifts, Professional Services'),
+('Travel & Accommodation', 'Flights, Hotels/Accommodation, Car Rentals, Travel Insurance, Meals/Per Diems, Tourism & Activities'),
+('Pets & Pet Care', 'Pet Food, Veterinary Bills, Pet Supplies, Pet Grooming, Pet Insurance'),
+('Miscellaneous', 'Gifts, Charitable Donations, Subscriptions, Legal Fees, Childcare Expenses, Laundry Services, Household Items'),
+('Taxes', 'Income Taxes, Sales Taxes, Property Taxes, Business Taxes, Import/Export Duties'),
+('Savings & Investments', 'Savings Contributions, Investment Accounts, Stocks/Bonds, Retirement Funds, Real Estate Investments'),
+('Subscriptions & Memberships', 'Club Memberships, Professional Associations, Streaming/Subscription Services (e.g., newspapers, entertainment, software)'); `
         }
       ]);
 
@@ -139,24 +156,24 @@ const InvoiceProcessor = () => {
               onChange={handleFileSelect}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
-            
+
             {preview && (
               <div className="mt-4">
-                <img 
-                  src={preview} 
-                  alt="Selected invoice" 
+                <img
+                  src={preview}
+                  alt="Selected invoice"
                   className="max-w-full h-auto rounded-lg shadow-md"
                 />
               </div>
             )}
-            
-            <Button 
-              onClick={handleProcess} 
+
+            <Button
+              onClick={handleProcess}
               disabled={!selectedFile || processing}
               className="w-full"
             >
-<AutoAwesomeIcon fontSize="large" style={{ color: "linear-gradient(45deg, #8a3ffc, #00c6ff)" }} />
-{processing ? (
+              <AutoAwesomeIcon fontSize="large" style={{ color: "linear-gradient(45deg, #8a3ffc, #00c6ff)" }} />
+              {processing ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...
