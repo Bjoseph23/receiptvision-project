@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Analytics from './pages/Analytics';
 import TermsAndPolicy from './components/TermsAndPolicy';
 import OneTapComponent from './components/OneTapComponent';
+import GoalsAndTips from './pages/GoalsAndTips';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -69,7 +70,35 @@ function AppContent() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="*" element={<NotFoundPage />} />
+                    <Route
+                        path="/analytics"
+                        element={
+                            <ProtectedRoute>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/settings"
+                        element={
+                            <ProtectedRoute>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/goals"
+                        element={
+                            <ProtectedRoute>
+                                <GoalsAndTips />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    
+                    {/* 404 Not Found Page */}
+                    <Route
+                        path="*"
+                        element={<NotFoundPage />}
+                    />
                 </Routes>
             </div>
         </div>
