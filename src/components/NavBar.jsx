@@ -11,6 +11,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import InvoiceProcessor from "./InvoiceProcessor";
 import LogoutPopup from "./LogoutPopup";
+import CameraCapture from "../components/CameraCapture";  
 import { useAuth } from "../contexts/AuthContext";
 import supabase from "../components/supabaseClient";
 
@@ -18,11 +19,10 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showInvoiceProcessor, setShowInvoiceProcessor] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const [showCameraCapture, setShowCameraCapture] = useState(false);  // New state for CameraCapture popup
   const { signOut, user } = useAuth();
 
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-  });
+  const [userInfo, setUserInfo] = useState({ name: '' });
 
   const toggleNav = () => {
     setIsOpen(!isOpen);
@@ -54,9 +54,7 @@ const NavBar = () => {
           if (error) throw error;
 
           if (data) {
-            setUserInfo({
-              name: data.name,
-            });
+            setUserInfo({ name: data.name });
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -77,10 +75,7 @@ const NavBar = () => {
 
   return (
     <div className="flex m-0 p-0 pr-0">
-      <div
-        className={`${isOpen ? "w-64" : "w-20"
-          } bg-gray-200 min-h-screen p-0 m-0 pt-8 pl-2 pr-2 relative duration-300 flex flex-col justify-between overflow-y-auto`}
-      >
+      <div className={`${isOpen ? "w-64" : "w-20"} bg-gray-200 min-h-screen p-0 m-0 pt-8 pl-2 pr-2 relative duration-300 flex flex-col justify-between overflow-y-auto`}>
         <div className="absolute pl-1 top-2 left-3 ml-2 cursor-pointer p-2 pl-1.5" onClick={toggleNav}>
           <MenuIcon fontSize="large" />
         </div>
@@ -110,10 +105,7 @@ const NavBar = () => {
               key={item.id}
               className={({ isActive }) =>
                 `relative flex items-center justify-start gap-x-4 p-2 cursor-pointer rounded-md 
-                ${isActive
-                  ? "bg-blue-200 text-blue-900 font-bold"
-                  : "text-gray-600"
-                } hover:bg-blue-50 transition-all duration-300`
+                ${isActive ? "bg-blue-200 text-blue-900 font-bold" : "text-gray-600"} hover:bg-blue-50 transition-all duration-300`
               }
             >
               <span className="flex-shrink-0 text-xl">{item.icon}</span>
@@ -125,15 +117,18 @@ const NavBar = () => {
         <div className="mt-6 pr-2 pl-1">
           <button
             className="flex items-center justify-start w-full gap-x-4 p-2 rounded-xl bg-blue-600 text-white hover:bg-blue-900 transition-all duration-300"
-            onClick={() => setShowInvoiceProcessor(true)}
+            onClick={() => setShowCameraCapture(true)}  // Show CameraCapture popup
           >
             <ReceiptIcon fontSize="large" />
-            {isOpen && <span>Scan Receipt with AI</span>}
+            {isOpen && <span className="font-bold">Scan Receipt with AI</span>}
           </button>
 
-          <button className="flex items-center justify-start w-full gap-x-4 p-2 mt-2 rounded-xl bg-blue-200 text-blue-600 hover:bg-blue-400 transition-all duration-300">
+          <button
+            className="flex items-center justify-start w-full gap-x-4 p-2 mt-2 rounded-xl bg-blue-200 text-blue-600 hover:bg-blue-400 transition-all duration-300"
+            onClick={() => setShowInvoiceProcessor(true)}
+          >
             <UploadIcon fontSize="large" />
-            {isOpen && <span className="font-bold">Upload Document</span>}
+            {isOpen && <span>Upload Document</span>}
           </button>
         </div>
 
@@ -180,6 +175,12 @@ const NavBar = () => {
       )}
 
       {showLogoutPopup && <LogoutPopup onConfirm={confirmLogout} onCancel={cancelLogout} />}
+
+      {showCameraCapture && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <CameraCapture onClose={() => setShowCameraCapture(false)} />  // CameraCapture popup
+        </div>
+      )}
     </div>
   );
 };

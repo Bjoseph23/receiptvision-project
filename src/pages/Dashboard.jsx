@@ -193,8 +193,13 @@ const Dashboard = () => {
           <SpendingTips tips={generateTips(dashboardData)} className="bg-white rounded-lg p-6" showMoreLink={true} />
         </div>
 
-        <div className="bg-white rounded-lg p-6 lg:row-span-2 lg:col-span-1 flex flex-col space-y-6">
-          <PieChartComponent title="Spending Breakdown" data={dashboardData.categories} showMoreLink={true} />
+        <div className="bg-white rounded-lg  lg:row-span-2 lg:col-span-1 flex flex-col space-y-6">
+          <PieChartComponent
+            title="Spending Breakdown"
+            data={dashboardData.categories.map(cat => ({ category: cat.name, amount: cat.value }))}
+            className="bg-white"
+            showMoreLink={true}
+          />
           <RecentTransactions transactions={dashboardData.recentTransactions} showMoreLink={true} />
         </div>
 
@@ -204,7 +209,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white rounded-lg p-6 lg:col-span-3">
-          <BarChartComponent title="Income Against Expenses" data={{ income: dashboardData.income, expenses: dashboardData.expenses }}  showMoreLink={true}/>
+          <BarChartComponent title="Income Against Expenses" data={{ income: dashboardData.income, expenses: dashboardData.expenses }} showMoreLink={true} />
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Alert, AlertDescription } from "./ui/alert";
 import { Loader2 } from "lucide-react";
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import InvoiceDataHandler from "./InvoiceDataHandler"
 import InvoiceFormEditor from './invoiceformEditor';

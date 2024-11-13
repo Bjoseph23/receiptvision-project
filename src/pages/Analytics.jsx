@@ -191,6 +191,12 @@ const Analytics = () => {
     return <div className="flex-1 pl-10 pt-10 p-6 bg-gray-100">Loading...</div>;
   }
 
+  // Prepare chart data: Extracting months and amounts
+  const incomeMonths = data.income.map(item => item.month);
+  const incomeAmounts = data.income.map(item => item.amount);
+  const expenseMonths = data.expenses.map(item => item.month);
+  const expenseAmounts = data.expenses.map(item => item.amount);
+
   return (
     <div className="flex-1 pl-10 pt-10 p-6 bg-gray-100">
       <h1 className="text-4xl font-bold text-blue-600 mb-2">{currentDate.day}</h1>
@@ -223,16 +229,10 @@ const Analytics = () => {
         
         {/* Charts Section */}
         <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <LineChartComponent title="Monthly Earnings" data={data} className="bg-white rounded-lg p-6" />
-          <LineChartComponent title="Monthly Expenses" data={data} className="bg-white rounded-lg p-6" />
-        </div>
-
-        <div className="lg:col-span-2 bg-white rounded-lg p-6">
-          <BarChartComponent title="Income against Expenses" data={data} />
-        </div>
-
-        <div className="bg-white rounded-lg p-6">
-          <PieChartComponent title="Spending Breakdown" data={data.categories} />
+          <LineChartComponent title="Monthly Earnings" data={{ labels: incomeMonths, values: incomeAmounts }} className="bg-white rounded-lg p-6" />
+          <LineChartComponent title="Monthly Expenses" data={{ labels: expenseMonths, values: expenseAmounts }} className="bg-white rounded-lg p-6" />
+          <BarChartComponent title="Income vs Expenses" data={{ labels: incomeMonths, incomeData: incomeAmounts, expenseData: expenseAmounts }} className="bg-white rounded-lg p-6" />
+          <PieChartComponent title="Category Spending" data={data.categories.map(cat => ({ category: cat.name, amount: cat.spent }))} className="bg-white rounded-lg " />
         </div>
       </div>
     </div>
