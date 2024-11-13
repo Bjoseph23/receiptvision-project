@@ -32,7 +32,7 @@ const processMonthlyData = (data, dateField) => {
     }));
 };
 
-const Expenditure = () => {
+const Analytics = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -239,4 +239,4 @@ const Expenditure = () => {
   );
 };
 
-export default Expenditure;
+export default Analytics;
