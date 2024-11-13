@@ -24,7 +24,6 @@ const Dashboard = () => {
   });
   const [categoryMap, setCategoryMap] = useState({});
 
-  // Fetch user information
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (user) {
@@ -47,7 +46,6 @@ const Dashboard = () => {
     fetchUserInfo();
   }, [user]);
 
-  // Fetch expense categories to map category IDs to category names
   useEffect(() => {
     const fetchExpenseCategories = async () => {
       try {
@@ -57,7 +55,6 @@ const Dashboard = () => {
 
         if (error) throw error;
 
-        // Create a mapping of category ID to category name
         const categoryMapping = {};
         categories.forEach((category) => {
           categoryMapping[category.id] = category.name;
@@ -72,7 +69,6 @@ const Dashboard = () => {
     fetchExpenseCategories();
   }, []);
 
-  // Fetch dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!user) return;
@@ -82,7 +78,6 @@ const Dashboard = () => {
         const sixMonthsAgo = new Date();
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-        // Fetch income data
         const { data: incomeData, error: incomeError } = await supabase
           .from("income")
           .select("amount, income_date, income_sources (name)")
@@ -92,7 +87,6 @@ const Dashboard = () => {
 
         if (incomeError) throw incomeError;
 
-        // Fetch expenses data
         const { data: expensesData, error: expensesError } = await supabase
           .from("expenses")
           .select("amount, category_id, transaction_date, description, expense_categories (name)")
@@ -102,11 +96,9 @@ const Dashboard = () => {
 
         if (expensesError) throw expensesError;
 
-        // Calculate totals and averages
         const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount), 0);
         const totalExpenses = expensesData.reduce((sum, item) => sum + Number(item.amount), 0);
 
-        // Process category data for pie chart
         const categoryTotals = expensesData.reduce((acc, expense) => {
           const categoryName = expense.expense_categories.name;
           acc[categoryName] = (acc[categoryName] || 0) + Number(expense.amount);
@@ -118,11 +110,9 @@ const Dashboard = () => {
           value,
         }));
 
-        // Process monthly data for line charts
         const monthlyIncome = processMonthlyData(incomeData, "income_date");
         const monthlyExpenses = processMonthlyData(expensesData, "transaction_date");
 
-        // Attach category name to each transaction
         const recentTransactions = expensesData.slice(0, 5).map((transaction) => ({
           ...transaction,
           category_name: categoryMap[transaction.category_id] || "Unknown Category",
@@ -148,7 +138,6 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [user, categoryMap]);
 
-  // Helper function to process monthly data
   const processMonthlyData = (data, dateField) => {
     const monthlyTotals = data.reduce((acc, item) => {
       const date = new Date(item[dateField]);
@@ -163,7 +152,6 @@ const Dashboard = () => {
     }));
   };
 
-  // Helper function to generate spending tips based on the data
   const generateTips = (data) => {
     const tips = [];
     const spendingRatio = data.totalExpenses / data.totalIncome;
@@ -194,29 +182,29 @@ const Dashboard = () => {
       </h1>
       <h2 className="text-xl font-semibold mt-7 mb-6">Dashboard</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 lg:col-span-2">
           <AverageSpending
             spending={dashboardData.averageMonthlyExpenses}
             income={dashboardData.averageMonthlyIncome}
             expenses={dashboardData.totalExpenses}
             className="bg-white rounded-lg p-6"
           />
-          <SpendingTips tips={generateTips(dashboardData)} className="bg-white rounded-lg p-6" />
+          <SpendingTips tips={generateTips(dashboardData)} className="bg-white rounded-lg p-6" showMoreLink={true} />
         </div>
 
-        <div className="lg:row-span-2 lg:col-span-1 bg-white rounded-lg p-6 flex flex-col space-y-6">
-          <PieChartComponent title="Spending Breakdown" data={dashboardData.categories} className="bg-white rounded-lg" />
-          <RecentTransactions transactions={dashboardData.recentTransactions} className="bg-transparent" />
+        <div className="bg-white rounded-lg p-6 lg:row-span-2 lg:col-span-1 flex flex-col space-y-6">
+          <PieChartComponent title="Spending Breakdown" data={dashboardData.categories} showMoreLink={true} />
+          <RecentTransactions transactions={dashboardData.recentTransactions} showMoreLink={true} />
         </div>
 
-        <div className="lg:col-span-2 grid grid-cols-2 gap-6">
-          <LineChartComponent title="Monthly Earnings" data={dashboardData.income} className="bg-white rounded-lg p-6" />
-          <LineChartComponent title="Monthly Expenses" data={dashboardData.expenses} className="bg-white rounded-lg p-6" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:col-span-2">
+          <LineChartComponent title="Monthly Earnings" data={dashboardData.income} className="bg-white rounded-lg mt-24 p-6" showMoreLink={true} />
+          <LineChartComponent title="Monthly Expenses" data={dashboardData.expenses} className="bg-white rounded-lg mt-24 p-6" showMoreLink={true} />
         </div>
 
-        <div className="lg:col-span-3 bg-white rounded-lg p-6">
-          <BarChartComponent title="Income Against Expenses" data={{ income: dashboardData.income, expenses: dashboardData.expenses }} />
+        <div className="bg-white rounded-lg p-6 lg:col-span-3">
+          <BarChartComponent title="Income Against Expenses" data={{ income: dashboardData.income, expenses: dashboardData.expenses }}  showMoreLink={true}/>
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import React from "react";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const RecentTransactions = ({ transactions }) => {
+
+const RecentTransactions = ({ transactions, showMoreLink }) => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4 text-gray-700">Recent Transactions</h2>
@@ -25,6 +27,11 @@ const RecentTransactions = ({ transactions }) => {
           <p className="text-gray-500">No recent transactions available.</p>
         )}
       </ul>
+      {showMoreLink && (
+        <a href="/analytics" className="flex items-center justify-end text-blue-500 font-semibold mt-4 underline">
+          See more <ArrowForwardIcon className="ml-1" />
+        </a>
+      )}
     </div>
   );
 };

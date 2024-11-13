@@ -1,9 +1,10 @@
 import React from "react";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const PieChartComponent = ({ title, data, className }) => {
+const PieChartComponent = ({ title, data, className, showMoreLink }) => {
   const chartData = data.map((item, index) => ({
     name: item.category,
     value: item.amount,
@@ -28,6 +29,11 @@ const PieChartComponent = ({ title, data, className }) => {
           <Tooltip />
         </PieChart>
       </ResponsiveContainer>
+      {showMoreLink && (
+        <a href="/analytics" className="flex items-center justify-end text-blue-500 font-semibold mt-4 underline">
+          See more <ArrowForwardIcon className="ml-1" />
+        </a>
+      )}
     </div>
   );
 };

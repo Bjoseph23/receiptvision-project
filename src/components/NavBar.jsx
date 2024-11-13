@@ -16,7 +16,6 @@ import supabase from "../components/supabaseClient";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState("dashboard");
   const [showInvoiceProcessor, setShowInvoiceProcessor] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const { signOut, user } = useAuth();
@@ -95,7 +94,7 @@ const NavBar = () => {
           </div>
         )}
 
-        <div className="pt-2 flex items-center gap-x-4 mt-6 pl-1">
+        <div className="pt-2 flex items-center gap-x-4 mt-6 pl-3">
           <img
             className="w-12 h-12 rounded-full"
             src="https://excellence.truman.edu/files/2022/02/Photo-Placeholder-Image-150x150-1.jpg"
@@ -109,12 +108,13 @@ const NavBar = () => {
             <NavLink
               to={item.path}
               key={item.id}
-              onClick={() => setActiveItem(item.id)}
-              className={`relative flex items-center justify-start gap-x-4 p-2 cursor-pointer rounded-md 
-                ${activeItem === item.id
-                  ? " pl-1 bg-blue-200 text-blue-900 font-bold"
+              className={({ isActive }) =>
+                `relative flex items-center justify-start gap-x-4 p-2 cursor-pointer rounded-md 
+                ${isActive
+                  ? "bg-blue-200 text-blue-900 font-bold"
                   : "text-gray-600"
-                } hover:bg-blue-50 transition-all duration-300`}
+                } hover:bg-blue-50 transition-all duration-300`
+              }
             >
               <span className="flex-shrink-0 text-xl">{item.icon}</span>
               {isOpen && <span className="origin-left duration-200">{item.label}</span>}
@@ -124,14 +124,14 @@ const NavBar = () => {
 
         <div className="mt-6 pr-2 pl-1">
           <button
-            className="flex items-center justify-start w-full pl-1 gap-x-4 p-3 rounded-xl bg-blue-600 text-white hover:bg-blue-900 transition-all duration-300"
+            className="flex items-center justify-start w-full gap-x-4 p-2 rounded-xl bg-blue-600 text-white hover:bg-blue-900 transition-all duration-300"
             onClick={() => setShowInvoiceProcessor(true)}
           >
             <ReceiptIcon fontSize="large" />
             {isOpen && <span>Scan Receipt with AI</span>}
           </button>
 
-          <button className="flex items-center justify-start w-full gap-x-4 p-3 pl-1 mt-2 rounded-xl bg-blue-200 text-blue-600 hover:bg-blue-400 transition-all duration-300">
+          <button className="flex items-center justify-start w-full gap-x-4 p-2 mt-2 rounded-xl bg-blue-200 text-blue-600 hover:bg-blue-400 transition-all duration-300">
             <UploadIcon fontSize="large" />
             {isOpen && <span className="font-bold">Upload Document</span>}
           </button>
@@ -141,19 +141,17 @@ const NavBar = () => {
           <ul>
             <NavLink
               to="/settings"
-              onClick={() => setActiveItem("settings")}
-              className={`relative flex pl-1 items-center gap-x-4 pt-3 pl-1 pb-2 cursor-pointer rounded-md
-                ${activeItem === "settings"
-                  ? "bg-blue-100 pl-1 text-blue-800 font-bold"
-                  : "text-gray-600"
-                } hover:bg-blue-50 transition-all duration-300`}
+              className={({ isActive }) =>
+                `relative flex pl-2 items-center gap-x-4 pt-3 pb-2 cursor-pointer rounded-md 
+                ${isActive ? "bg-blue-100 text-blue-800 font-bold" : "text-gray-600"} hover:bg-blue-50 transition-all duration-300`
+              }
             >
               <SettingsIcon fontSize="large" />
               {isOpen && <span>Settings</span>}
             </NavLink>
             <div
               onClick={handleLogout}
-              className="relative flex items-center gap-x-4 p-2 pl-1 cursor-pointer rounded-md text-gray-600 hover:bg-blue-50 transition-all duration-300"
+              className="relative flex items-center gap-x-4 p-2 cursor-pointer rounded-md text-gray-600 hover:bg-blue-50 transition-all duration-300"
             >
               <LogoutIcon fontSize="large" />
               {isOpen && <span>Log Out</span>}

@@ -1,4 +1,6 @@
 import React from "react";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 import {
   BarChart,
   Bar,
@@ -9,7 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const BarChartComponent = ({ title, data = {}, className }) => {
+const BarChartComponent = ({ title, data = {}, className, showMoreLink }) => {
   const chartData = [
     {
       name: "Monday",
@@ -51,6 +53,11 @@ const BarChartComponent = ({ title, data = {}, className }) => {
           <Bar dataKey="expenses" fill="#8884d8" />
         </BarChart>
       </ResponsiveContainer>
+      {showMoreLink && (
+        <a href="/analytics" className="flex items-center justify-end text-blue-500 font-semibold mt-4 underline">
+          See more <ArrowForwardIcon className="ml-1" />
+        </a>
+      )}
     </div>
   );
 };
