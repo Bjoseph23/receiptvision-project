@@ -46,7 +46,7 @@ const NavBar = () => {
       if (user) {
         try {
           const { data, error } = await supabase
-            .from("users")
+            .from("auth.users")
             .select("name")
             .eq("id", user.id)
             .single();
@@ -68,7 +68,7 @@ const NavBar = () => {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: <DashboardIcon fontSize="large" />, path: "/dashboard" },
     { id: "expenditure", label: "Expenditure", icon: <MonetizationOnIcon fontSize="large" />, path: "/expenditure" },
-    { id: "goals", label: "Goals and Tips", icon: <ReceiptIcon fontSize="large" />, path: "/goals" },
+    { id: "goals", label: "Financial Goals", icon: <ReceiptIcon fontSize="large" />, path: "/goals" },
     { id: "analytics", label: "Revenue Analytics", icon: <BarChartIcon fontSize="large" />, path: "/analytics" },
     { id: "terms", label: "Privacy Policy", icon: <PolicyIcon fontSize="large" />, path: "/terms" },
   ];

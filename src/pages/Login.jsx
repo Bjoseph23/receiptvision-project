@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import supabase from '../components/supabaseClient';
 import loginImage from '../assets/login-image.png';
 
-
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -31,27 +30,25 @@ const Login = () => {
 
     const insertUserIfNeeded = async (user) => {
         try {
-            // First check if user exists
             const { data: existingUser, error: fetchError } = await supabase
                 .from('users')
-                .select('id')  // Only select id for existence check
+                .select('id')
                 .eq('id', user.id)
-                .maybeSingle(); // Use maybeSingle() instead of single()
+                .maybeSingle();
 
             if (fetchError) throw fetchError;
 
-            // If user doesn't exist, create them
             if (!existingUser) {
                 const { error: insertError } = await supabase
                     .from('users')
-                    .upsert([  // Use upsert instead of insert to handle race conditions
+                    .upsert([
                         {
                             id: user.id,
                             email: user.email,
                             created_at: new Date().toISOString(),
                         }
                     ], {
-                        onConflict: 'id'  // Specify the conflict resolution column
+                        onConflict: 'id'
                     });
 
                 if (insertError) throw insertError;
@@ -96,6 +93,7 @@ const Login = () => {
             setLoading(false);
         }
     };
+
     const handleGoogleLogin = async () => {
         try {
             const { data, error } = await supabase.auth.signInWithOAuth({
@@ -116,25 +114,6 @@ const Login = () => {
         }
     };
 
-    const handleCreateTestAccount = async () => {
-        try {
-            setLoading(true);
-            const { data, error } = await supabase.auth.signUp({
-                email: formData.email,
-                password: formData.password,
-            });
-
-            if (error) throw error;
-
-            alert('Test account created! Please check your email for verification.');
-        } catch (err) {
-            console.error('Sign up error:', err);
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return (
         <div className="flex flex-col md:flex-row h-screen w-full">
             <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col items-start justify-start bg-gray-100 p-6 relative">
@@ -142,7 +121,13 @@ const Login = () => {
                     <img
                         src={loginImage}
                         alt="Person holding laptop"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover" // Ensure it covers the container without stretching
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover', // Keeps the aspect ratio without distortion
+                            objectPosition: 'downwards' // Centers the image in the container
+                        }}
                         onError={(e) => { e.target.src = "https://placehold.co/720x1040?text=Login+Image"; }}
                     />
                 </div>
@@ -178,7 +163,7 @@ const Login = () => {
                         onClick={handleGoogleLogin}
                         className="px-4 py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
                     >
-                        <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"></img>
+                        <img className="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"></img>
                         <span>Login with Google</span>
                     </Button>
 
@@ -232,14 +217,6 @@ const Login = () => {
                         }}
                     >
                         {loading ? 'Signing in...' : 'Sign in'}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={handleCreateTestAccount}
-                        className="w-full mt-2 p-2 text-sm text-gray-600 hover:text-gray-800"
-                    >
-                        Create Test Account
                     </button>
 
                     <Typography variant="body2" className="text-center text-gray-600 mt-4">

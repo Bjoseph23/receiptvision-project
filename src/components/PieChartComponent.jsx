@@ -7,7 +7,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 const PieChartComponent = ({ title, data, className, showMoreLink }) => {
   // Calculate total amount for percentage calculation
   const totalAmount = data.reduce((acc, item) => acc + item.amount, 0);
-  
+
   // Prepare chart data with percentages and colors
   const chartData = data.map((item, index) => ({
     name: item.category,
@@ -22,12 +22,12 @@ const PieChartComponent = ({ title, data, className, showMoreLink }) => {
 
       {/* Top: Pie Chart */}
       <div className="w-full mb-6 flex items-center"> 
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={250}>
           <PieChart>
             <Pie
               data={chartData}
               dataKey="value"
-              outerRadius={100}
+              outerRadius={90}
               fill="#8884d8"
               labelLine={false}
               label={({ index }) => `${chartData[index].name}`}
@@ -43,25 +43,25 @@ const PieChartComponent = ({ title, data, className, showMoreLink }) => {
 
       {/* Bottom: Breakdown of Categories */}
       <div className="w-full mt-4">
-        <div className="flex justify-between text-xl font-bold text-gray-600 border-b pb-1 mb-2">
-          <span className="text-left flex-1">Category</span>
-          <span className="text-right flex-1">Amount</span>
-          <span className="text-right flex-1">Percentage</span>
+        <div className="flex justify-between text-lg font-semibold text-gray-600 border-b pb-1 mb-2">
+          <span className="text-left w-1/3">Category</span>
+          <span className="text-right w-1/3">Amount</span>
+          <span className="text-right w-1/3">Percentage</span>
         </div>
 
         {/* Breakdown Data Rows */}
-        <div className=" space-y-2">
+        <div className="space-y-1">
           {chartData.map((item, index) => (
             <div key={index} className="flex justify-between items-center text-sm">
-              <span className="text-lg flex items-center text-left flex-1">
+              <span className="flex items-center text-left w-1/3">
                 <span 
-                  className="text-lg inline-block w-3 h-3 mr-2 rounded-full"
+                  className="inline-block w-3 h-3 mr-2 rounded-full"
                   style={{ backgroundColor: item.color }}
                 ></span>
                 {item.name}
               </span>
-              <span className="text-lg  text-blue-800 text-right flex-1">{item.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Ksh</span>
-              <span className="text-lg text-gray-900 text-right flex-1">({item.percentage}%)</span>
+              <span className="text-blue-800 text-right w-1/3">{item.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Ksh</span>
+              <span className="text-gray-900 text-right w-1/3">({item.percentage}%)</span>
             </div>
           ))}
         </div>

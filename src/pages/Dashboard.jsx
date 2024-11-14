@@ -13,8 +13,8 @@ const Dashboard = () => {
   const [userInfo, setUserInfo] = useState({ name: "" });
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
-    income: [],
-    expenses: [],
+    income: {},
+    expenses: {},
     categories: [],
     recentTransactions: [],
     totalIncome: 0,
@@ -23,6 +23,22 @@ const Dashboard = () => {
     averageMonthlyExpenses: 0,
   });
   const [categoryMap, setCategoryMap] = useState({});
+
+  // Utility function to structure data by month and week
+  const structureDataByMonthAndWeek = (data, dateField) => {
+    const structuredData = {};
+
+    data.forEach((item) => {
+      const date = new Date(item[dateField]);
+      const month = date.toLocaleString("default", { month: "long" });
+      const week = `Week ${Math.ceil(date.getDate() / 7)}`;
+      if (!structuredData[month]) structuredData[month] = {};
+      if (!structuredData[month][week]) structuredData[month][week] = { total: 0 };
+      structuredData[month][week].total += Number(item.amount);
+    });
+
+    return structuredData;
+  };
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -96,6 +112,10 @@ const Dashboard = () => {
 
         if (expensesError) throw expensesError;
 
+        // Process data
+        const incomeByMonthAndWeek = structureDataByMonthAndWeek(incomeData, "income_date");
+        const expensesByMonthAndWeek = structureDataByMonthAndWeek(expensesData, "transaction_date");
+
         const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount), 0);
         const totalExpenses = expensesData.reduce((sum, item) => sum + Number(item.amount), 0);
 
@@ -110,17 +130,14 @@ const Dashboard = () => {
           value,
         }));
 
-        const monthlyIncome = processMonthlyData(incomeData, "income_date");
-        const monthlyExpenses = processMonthlyData(expensesData, "transaction_date");
-
         const recentTransactions = expensesData.slice(0, 5).map((transaction) => ({
           ...transaction,
           category_name: categoryMap[transaction.category_id] || "Unknown Category",
         }));
 
         setDashboardData({
-          income: monthlyIncome,
-          expenses: monthlyExpenses,
+          income: incomeByMonthAndWeek,
+          expenses: expensesByMonthAndWeek,
           categories: categoryData,
           recentTransactions,
           totalIncome,
@@ -138,20 +155,7 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [user, categoryMap]);
 
-  const processMonthlyData = (data, dateField) => {
-    const monthlyTotals = data.reduce((acc, item) => {
-      const date = new Date(item[dateField]);
-      const monthYear = date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
-      acc[monthYear] = (acc[monthYear] || 0) + Number(item.amount);
-      return acc;
-    }, {});
-
-    return Object.entries(monthlyTotals).map(([date, amount]) => ({
-      date,
-      amount,
-    }));
-  };
-
+  // Define the missing `generateTips` function here
   const generateTips = (data) => {
     const tips = [];
     const spendingRatio = data.totalExpenses / data.totalIncome;
@@ -193,7 +197,7 @@ const Dashboard = () => {
           <SpendingTips tips={generateTips(dashboardData)} className="bg-white rounded-lg p-6" showMoreLink={true} />
         </div>
 
-        <div className="bg-white rounded-lg  lg:row-span-2 lg:col-span-1 flex flex-col space-y-6">
+        <div className="bg-white rounded-lg lg:row-span-2 lg:col-span-1 flex flex-col space-y-6">
           <PieChartComponent
             title="Spending Breakdown"
             data={dashboardData.categories.map(cat => ({ category: cat.name, amount: cat.value }))}
@@ -204,8 +208,8 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:col-span-2">
-          <LineChartComponent title="Monthly Earnings" data={dashboardData.income} className="bg-white rounded-lg mt-24 p-6" showMoreLink={true} />
-          <LineChartComponent title="Monthly Expenses" data={dashboardData.expenses} className="bg-white rounded-lg mt-24 p-6" showMoreLink={true} />
+          <LineChartComponent title="Monthly Earnings" data={dashboardData.income} className="bg-white rounded-lg  " showMoreLink={true} />
+          <LineChartComponent title="Monthly Expenses" data={dashboardData.expenses} className="bg-white rounded-lg  p-6" showMoreLink={true} />
         </div>
 
         <div className="bg-white rounded-lg p-6 lg:col-span-3">
