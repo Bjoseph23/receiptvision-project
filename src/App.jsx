@@ -18,6 +18,7 @@ function App() {
         <Router>
             <AuthProvider>
                 <AppContent />
+                
             </AuthProvider>
         </Router>
     );
@@ -92,15 +93,23 @@ function AppContent() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                    
+                    <Route 
+                        path="/" 
+                        element={<Navigate to="/dashboard" replace />} />
+
+                    <Route
+                        path="/" 
+                        element={<Navigate to="/dashboard" replace />} />
+                        
                     {/* 404 Not Found Page */}
                     <Route
                         path="*"
                         element={<NotFoundPage />}
                     />
                 </Routes>
+               
             </div>
+            
         </div>
     );
 }

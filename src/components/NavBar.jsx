@@ -82,10 +82,10 @@ const NavBar = () => {
 
         {isOpen && (
           <div className="pl-3 mt-8 mb-4">
-            <h1 className="text-xl font-bold">
+            <a href="/dashboard" className="text-xl font-bold">
               <span className="text-blue-600">Receipt</span>
               <span className="text-black">Vision</span>
-            </h1>
+            </a>
           </div>
         )}
 
