@@ -88,53 +88,72 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!user) return;
-
+  
       setLoading(true);
       try {
         const sixMonthsAgo = new Date();
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-
+  
+        // Fetch income data
         const { data: incomeData, error: incomeError } = await supabase
           .from("income")
           .select("amount, income_date, income_sources (name)")
           .eq("user_id", user.id)
           .gte("income_date", sixMonthsAgo.toISOString())
           .order("income_date", { ascending: false });
-
+  
         if (incomeError) throw incomeError;
-
+  
+        // Fetch expenses data
         const { data: expensesData, error: expensesError } = await supabase
           .from("expenses")
           .select("amount, category_id, transaction_date, description, expense_categories (name)")
           .eq("user_id", user.id)
           .gte("transaction_date", sixMonthsAgo.toISOString())
           .order("transaction_date", { ascending: false });
-
+  
         if (expensesError) throw expensesError;
-
+  
         // Process data
         const incomeByMonthAndWeek = structureDataByMonthAndWeek(incomeData, "income_date");
         const expensesByMonthAndWeek = structureDataByMonthAndWeek(expensesData, "transaction_date");
-
+  
         const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount), 0);
         const totalExpenses = expensesData.reduce((sum, item) => sum + Number(item.amount), 0);
-
+  
         const categoryTotals = expensesData.reduce((acc, expense) => {
           const categoryName = expense.expense_categories.name;
           acc[categoryName] = (acc[categoryName] || 0) + Number(expense.amount);
           return acc;
         }, {});
-
+  
         const categoryData = Object.entries(categoryTotals).map(([name, value]) => ({
           name,
           value,
         }));
-
-        const recentTransactions = expensesData.slice(0, 5).map((transaction) => ({
-          ...transaction,
-          category_name: categoryMap[transaction.category_id] || "Unknown Category",
-        }));
-
+  
+        // Combine incomes and expenses for recent transactions
+        const combinedTransactions = [
+          ...incomeData.map((income) => ({
+            ...income,
+            type: "Income",
+            date: new Date(income.income_date),
+            category_name: income.income_sources.name || "Unknown Source",
+          })),
+          ...expensesData.map((expense) => ({
+            ...expense,
+            type: "Expense",
+            date: new Date(expense.transaction_date),
+            category_name: categoryMap[expense.category_id] || "Unknown Category",
+          })),
+        ];
+  
+        // Sort combined transactions by date (descending)
+        combinedTransactions.sort((a, b) => b.date - a.date);
+  
+        // Select the 5 most recent transactions
+        const recentTransactions = combinedTransactions.slice(0, 5);
+  
         setDashboardData({
           income: incomeByMonthAndWeek,
           expenses: expensesByMonthAndWeek,
@@ -145,15 +164,16 @@ const Dashboard = () => {
           averageMonthlyIncome: totalIncome / 6,
           averageMonthlyExpenses: totalExpenses / 6,
         });
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+      } catch (err) {
+        console.error("Error fetching dashboard data:", err);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchDashboardData();
   }, [user, categoryMap]);
+  
 
   // Define the missing `generateTips` function here
   const generateTips = (data) => {
