@@ -1,28 +1,36 @@
 import React from "react";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const RecentTransactions = ({ transactions }) => {
+const RecentTransactions = ({ transactions, showMoreLink }) => {
   return (
-    <div className="bg-white rounded-lg p-4 shadow-md">
-      <h3 className="text-gray-600 font-bold mb-4">Recent Transactions</h3>
-      <ul>
+    <div className="p-4 md:p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-lg md:text-2xl font-semibold mb-4 text-gray-700">Recent Transactions</h2>
+      <ul className="space-y-4">
         {transactions.length > 0 ? (
           transactions.map((transaction, index) => (
-            <li
-              key={index}
-              className="flex justify-between items-center p-2 border-b border-gray-200"
-            >
-              <div>
-                <p className="text-sm">{transaction.date}</p>
-                <p className="font-semibold">${transaction.amount}</p>
+            <li key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-3">
+              <div className="mb-2 md:mb-0">
+                <p className="text-sm md:text-lg font-medium text-gray-800">
+                  {transaction.category_name || "Unknown Category"}
+                </p>
+                <p className="text-gray-500 text-xs md:text-sm">
+                  {new Date(transaction.transaction_date).toLocaleDateString()} - {transaction.description}
+                </p>
               </div>
-              <ArrowForwardIcon />
+              <p className="text-sm md:text-lg font-semibold text-red-500">
+                -Ksh {transaction.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </p>
             </li>
           ))
         ) : (
-          <p>No recent transactions available.</p>
+          <p className="text-gray-500">No recent transactions available.</p>
         )}
       </ul>
+      {showMoreLink && (
+        <a href="/analytics" className="flex items-center justify-end text-blue-500 font-semibold mt-4 text-xs md:text-sm underline">
+          See more <ArrowForwardIcon className="ml-1" fontSize="small" />
+        </a>
+      )}
     </div>
   );
 };

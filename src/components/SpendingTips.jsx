@@ -1,6 +1,7 @@
 import React from "react";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const SpendingTips = ({ tips = [] }) => {
+const SpendingTips = ({ tips = [], showMoreLink }) => {
   return (
     <div className="p-6 bg-blue-100 rounded-lg shadow-md">
       <h3 className="text-xl font-semibold mb-4">Tips Based on Your Spending</h3>
@@ -20,6 +21,11 @@ const SpendingTips = ({ tips = [] }) => {
           ))
         )}
       </ul>
+      {showMoreLink && (
+        <a href="/goals" className="flex items-center justify-end text-blue-500 font-semibold mt-4 underline">
+          See more <ArrowForwardIcon className="ml-1" />
+        </a>
+      )}
     </div>
   );
 };

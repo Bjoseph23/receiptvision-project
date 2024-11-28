@@ -7,7 +7,7 @@ import NavBar from './components/NavBar';
 import Dashboard from './pages/Dashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Expenditure from './pages/Expenditure';
+import Analytics from './pages/Analytics';
 import TermsAndPolicy from './components/TermsAndPolicy';
 import OneTapComponent from './components/OneTapComponent';
 import GoalsAndTips from './pages/GoalsAndTips';
@@ -18,6 +18,7 @@ function App() {
         <Router>
             <AuthProvider>
                 <AppContent />
+                
             </AuthProvider>
         </Router>
     );
@@ -28,16 +29,11 @@ function AppContent() {
     const [isNavBarVisible, setIsNavBarVisible] = useState(true);
 
     // Paths where NavBar should be hidden
-    const hideNavBarPaths = ['/login', '/Login', '/signup', '/Signup'];
+    const hideNavBarPaths = ['/login', '/forgot-password', '/signup'];
 
     // Update NavBar visibility based on current path
     useEffect(() => {
-        // Check if the current path is in the hideNavBarPaths array or is an unmatched route (404)
-        if (hideNavBarPaths.includes(location.pathname) || location.pathname === '/404') {
-            setIsNavBarVisible(false);
-        } else {
-            setIsNavBarVisible(true);
-        }
+        setIsNavBarVisible(!hideNavBarPaths.includes(location.pathname) && location.pathname !== '/404');
     }, [location.pathname]);
 
     return (
@@ -47,6 +43,7 @@ function AppContent() {
                 <OneTapComponent />
                 
                 <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -59,10 +56,10 @@ function AppContent() {
                         }
                     />
                     <Route
-                        path="/expenditure"
+                        path="/analytics"
                         element={
                             <ProtectedRoute>
-                                <Expenditure />
+                                <Analytics />
                             </ProtectedRoute>
                         }
                     />
@@ -96,15 +93,23 @@ function AppContent() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                    
+                    <Route 
+                        path="/" 
+                        element={<Navigate to="/dashboard" replace />} />
+
+                    <Route
+                        path="/" 
+                        element={<Navigate to="/dashboard" replace />} />
+                        
                     {/* 404 Not Found Page */}
                     <Route
                         path="*"
                         element={<NotFoundPage />}
                     />
                 </Routes>
+               
             </div>
+            
         </div>
     );
 }

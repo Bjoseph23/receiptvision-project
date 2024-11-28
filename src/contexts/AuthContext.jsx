@@ -23,8 +23,20 @@ export const AuthProvider = ({ children }) => {
         return () => subscription.unsubscribe();
     }, []);
 
+    const signUp = async (data) => {
+        const { user, error } = await supabase.auth.signUp(data);
+        if (error) throw error;
+        if (user) {
+            const { error: insertError } = await supabase
+                .from('users')
+                .insert([{ id: user.id, email: user.email, name: data.options.data.name }]); // Adjusted
+            if (insertError) throw insertError;
+        }
+        return user;
+    };
+
     const value = {
-        signUp: (data) => supabase.auth.signUp(data),
+        signUp,
         signIn: (data) => supabase.auth.signInWithPassword(data),
         signOut: () => {
             supabase.auth.signOut();

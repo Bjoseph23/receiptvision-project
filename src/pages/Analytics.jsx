@@ -32,7 +32,7 @@ const processMonthlyData = (data, dateField) => {
     }));
 };
 
-const Expenditure = () => {
+const Analytics = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -44,8 +44,25 @@ const Expenditure = () => {
     plannedBudgets: [],
     activeTips: [],
     spending: 0,
-    transactions: []
+    transactions: [],
+    averageMonthlyIncome: 0,
+    averageMonthlyExpenses: 0,
   });
+
+  const structureDataByMonthAndWeek = (data, dateField) => {
+    const structuredData = {};
+
+    data.forEach((item) => {
+      const date = new Date(item[dateField]);
+      const month = date.toLocaleString("default", { month: "long" });
+      const week = `Week ${Math.ceil(date.getDate() / 7)}`;
+      if (!structuredData[month]) structuredData[month] = {};
+      if (!structuredData[month][week]) structuredData[month][week] = { total: 0 };
+      structuredData[month][week].total += Number(item.amount);
+    });
+
+    return structuredData;
+  };
 
   const [currentDate, setCurrentDate] = useState({
     day: '',
@@ -69,17 +86,25 @@ const Expenditure = () => {
             income_sources (name)
           `)
           .eq("user_id", user.id)
-          .gte("income_date", sixMonthsAgo.toISOString());
+          .gte("income_date", sixMonthsAgo.toISOString())
+          .order("income_date", { ascending: false });
+        
+          if (incomeError) throw incomeError;
+
 
         // Fetch expenses data
         const { data: expensesData, error: expensesError } = await supabase
           .from("expenses")
           .select(`
-            id, amount, description, transaction_date,
+            id, category_id, amount, description, transaction_date,
             expense_categories (id, name)
           `)
           .eq("user_id", user.id)
-          .gte("transaction_date", sixMonthsAgo.toISOString());
+          .gte("transaction_date", sixMonthsAgo.toISOString())
+          .order("transaction_date", { ascending: false });
+
+        if (expensesError) throw expensesError;
+
 
         // Fetch tips data
         const { data: tipsData } = await supabase
@@ -91,6 +116,15 @@ const Expenditure = () => {
           .eq("user_id", user.id)
           .eq("is_relevant", true);
 
+        // Process Income and category data
+
+        const incomeByMonthAndWeek = structureDataByMonthAndWeek(incomeData, "income_date");
+        const expensesByMonthAndWeek = structureDataByMonthAndWeek(expensesData, "transaction_date");
+
+        const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount), 0);
+        const totalExpenses = expensesData.reduce((sum, item) => sum + Number(item.amount), 0);
+        
+          
         // Process category totals and budgets
         const categoryTotals = expensesData.reduce((acc, expense) => {
           const categoryName = expense.expense_categories.name;
@@ -107,9 +141,7 @@ const Expenditure = () => {
           return acc;
         }, {});
 
-        const totalIncome = incomeData.reduce((sum, item) => sum + Number(item.amount), 0);
-        const totalExpenses = expensesData.reduce((sum, item) => sum + Number(item.amount), 0);
-
+        
         const plannedBudgets = Object.values(categoryTotals).map(category => ({
           ...category,
           remaining: category.planned - category.spent,
@@ -117,12 +149,14 @@ const Expenditure = () => {
         }));
 
         setData({
-          income: processMonthlyData(incomeData, "income_date"),
-          expenses: processMonthlyData(expensesData, "transaction_date"),
+          income:  incomeByMonthAndWeek,
+          expenses: expensesByMonthAndWeek,
           categories: Object.values(categoryTotals),
           totalIncome,
           totalExpenses,
           plannedBudgets,
+          averageMonthlyIncome: totalIncome / 6,
+          averageMonthlyExpenses: totalExpenses / 6,
           activeTips: tipsData?.map(tip => ({
             title: tip.tip_templates.title,
             description: tip.tip_templates.description,
@@ -191,6 +225,11 @@ const Expenditure = () => {
     return <div className="flex-1 pl-10 pt-10 p-6 bg-gray-100">Loading...</div>;
   }
 
+  // Prepare chart data: Extracting months and amounts
+  const incomeMonths = Array.isArray(data.income) ? data.income.map(item => item.month) : [];
+  const incomeAmounts = Array.isArray(data.income) ? data.income.map(item => item.amount) : [];
+  const expenseAmounts = Array.isArray(data.expenses) ? data.expenses.map(item => item.amount) : [];
+
   return (
     <div className="flex-1 pl-10 pt-10 p-6 bg-gray-100">
       <h1 className="text-4xl font-bold text-blue-600 mb-2">{currentDate.day}</h1>
@@ -223,20 +262,14 @@ const Expenditure = () => {
         
         {/* Charts Section */}
         <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <LineChartComponent title="Monthly Earnings" data={data} className="bg-white rounded-lg p-6" />
-          <LineChartComponent title="Monthly Expenses" data={data} className="bg-white rounded-lg p-6" />
-        </div>
-
-        <div className="lg:col-span-2 bg-white rounded-lg p-6">
-          <BarChartComponent title="Income against Expenses" data={data} />
-        </div>
-
-        <div className="bg-white rounded-lg p-6">
-          <PieChartComponent title="Spending Breakdown" data={data.categories} />
+        <LineChartComponent title="Monthly Earnings" data={data.income} className="bg-white rounded-lg mt-24 p-6" />
+        <LineChartComponent title="Monthly Expenses" data={data.expenses} className="bg-white rounded-lg mt-24 p-6" />
+          <BarChartComponent title="Income vs Expenses" data={{ labels: incomeMonths, incomeData: incomeAmounts, expenseData: expenseAmounts }} className="bg-white rounded-lg p-6" />
+          <PieChartComponent title="Category Spending" data={data.categories.map(cat => ({ category: cat.name, amount: cat.spent }))} className="bg-white rounded-lg " />
         </div>
       </div>
     </div>
   );
 };
 
-export default Expenditure;
+export default Analytics;

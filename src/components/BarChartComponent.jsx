@@ -1,13 +1,43 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const BarChartComponent = ({ title, data, className }) => {
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+const BarChartComponent = ({ title, data = {}, className, showMoreLink }) => {
   const chartData = [
-    { name: "Monday", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Tuesday", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Wednesday", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Thursay", income: data.income || 0, expenses: data.expenses || 0 },
-    { name: "Friday", income: data.income || 0, expenses: data.expenses || 0 },
+    {
+      name: "Monday",
+      income: data.income?.monday || 0,
+      expenses: data.expenses?.monday || 0,
+    },
+    {
+      name: "Tuesday",
+      income: data.income?.tuesday || 0,
+      expenses: data.expenses?.tuesday || 0,
+    },
+    {
+      name: "Wednesday",
+      income: data.income?.wednesday || 0,
+      expenses: data.expenses?.wednesday || 0,
+    },
+    {
+      name: "Thursday",
+      income: data.income?.thursday || 0,
+      expenses: data.expenses?.thursday || 0,
+    },
+    {
+      name: "Friday",
+      income: data.income?.friday || 0,
+      expenses: data.expenses?.friday || 0,
+    },
   ];
 
   return (
@@ -23,6 +53,11 @@ const BarChartComponent = ({ title, data, className }) => {
           <Bar dataKey="expenses" fill="#8884d8" />
         </BarChart>
       </ResponsiveContainer>
+      {showMoreLink && (
+        <a href="/analytics" className="flex items-center justify-end text-blue-500 font-semibold mt-4 underline">
+          See more <ArrowForwardIcon className="ml-1" />
+        </a>
+      )}
     </div>
   );
 };
